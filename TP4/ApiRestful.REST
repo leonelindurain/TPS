@@ -1,8 +1,8 @@
-DELETE  http://localhost:8080/api/productos/3 HTTP/1.1
+DELETE  http://localhost:8080/api/productos/2 HTTP/1.1
 Content-Type:  application/json
 
 {
-    "titulo": "Casco Anachei",
-    "precio": 16000,
-    "thumbnail" : "https://cascoanachei123456.jpg"
+    "titulo": "Casco Modificado con PUT",
+    "precio": 99999999999,
+    "thumbnail" : "CascoModificadoConPut.JPG"
 }

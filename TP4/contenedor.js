@@ -9,16 +9,16 @@ class Contenedor {
         try {
         if (fs.existsSync(this.ruta)){
         let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
+        if (dataArchivo.length !== 0){
         let dataArchivoParse = JSON.parse(dataArchivo)
-        if (dataArchivoParse.length !== 0){
         var lastId = dataArchivoParse[dataArchivoParse.length-1].id + 1
         await fs.promises.writeFile(this.ruta, JSON.stringify([...dataArchivoParse, {...obj, id: lastId} ], null, 2))
         console.log(`El producto obtuvo el id numero: ${lastId}`);
         return dataArchivoParse.length + 1
         }else{
             await fs.promises.writeFile(this.ruta, JSON.stringify([{...obj, id: 1}], null, 2))
-            console.log(`El producto obtuvo el id numero: ${dataArchivoParse.length + 1}`);
-            return dataArchivoParse.length + 1
+            console.log(`El producto obtuvo el id numero: ${dataArchivo.length + 1}`);
+            return dataArchivo.length + 1
         }
         } else {
             await fs.promises.writeFile(this.ruta, JSON.stringify([{...obj, id: 1}], null, 2))
@@ -35,16 +35,17 @@ async updateById(obj) {
     try {
         let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
         let dataArchivoParse = await JSON.parse(dataArchivo)
-        const ObjIndex = dataArchivoParse.findIndex(producto => producto.id === obj.id)
+        const ObjIndex = dataArchivoParse.findIndex((producto) => producto.id === obj.id)
         if (ObjIndex !== -1) {
             dataArchivoParse [ObjIndex] = obj
-            await fs.promises.writeFile(this.ruta, JSON.stringify ([ dataArchivoParse], null, 2))
-            return ('El producto fue actualizado')
+            await fs.promises.writeFile(this.ruta, JSON.stringify (dataArchivoParse, null, 2))
+            return (1)
         } else  {
             return {error: 'No existe el producto'}
         }
     } catch (error) {
         console.log(error)
+        return (0)
     }
 }
 
@@ -86,16 +87,21 @@ async deleteById(id) {
     try {
         let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
         let dataArchivoParse = JSON.parse(dataArchivo)
+        if (dataArchivoParse.length === 1) {
+            await fs.promises.writeFile(this.ruta, '' , 'utf-8')
+            console.log('Se elimino el producto correctamente, ya no hay productos cargados')
+            return 
+        }
         let producto = dataArchivoParse.find(producto => producto.id === id)
         if (producto) {
             let dataArchivoParseBorrar = dataArchivoParse.filter (producto => producto.id !== id)
             await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParseBorrar, null, 2), 'utf-8')
             console.log('Producto eliminado')
-            return null
-         } else {
+            return 1
+        } else {
             console.log('No se encontro el producto')
-            return null
-         } 
+            return 0
+        } 
     } catch (error) {
         console.log(error)
     }
@@ -103,7 +109,7 @@ async deleteById(id) {
 
 async deleteAll(){
     try {
-        await fs.promises.writeFile(this.ruta, JSON.stringify([], null, 2), 'utf-8')
+        await fs.promises.writeFile(this.ruta, '' , 'utf-8')
         console.log('Se han eliminado todos los productos')
             return null
     } catch (error) {

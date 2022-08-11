@@ -44,15 +44,22 @@ routerProductos.post ('/', async (req,res) => {
 routerProductos.put ('/:id', async (req,res) => {
     const { id } = req.params
     const objProducto = req.body
-    await contenedor.updateById ({...objProducto, id: parseInt(id)})
-    res.json ({
-        ok: true,
-        mensaje: 'El Put modifico correctamente el producto',
-        producto: (objProducto)
+    const result = await contenedor.updateById ({...objProducto, id: parseInt(id)})
+    if (result > 0) {
+        res.json ({
+            ok: true,
+            mensaje: 'El Put modifico correctamente el producto',
+            producto: (objProducto) 
     })
+    } else {
+        res.json ({
+            ok: false,
+            mensaje: 'El Put no se modifico',
+    })
+    }
 })
 
-routerProductos.delete ('./:id', async (req,res) => {
+routerProductos.delete ('/:id', async (req,res) => {
     const { id } = req.params
     const productoEliminado = await contenedor.deleteById(parseInt(id))
     if (productoEliminado > 0) {
