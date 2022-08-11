@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Casco H5",
+    "price": "5000",
+    "thumbnail": "https://www.nexon.com.ar/media/catalog/product/cache/2/image/9df78eab33525d08d6e5fb8d27136e95/h/5/h5_2.jpg",
+    "id": 1
+  },
+  {
+    "title": "Casco RS5",
+    "price": "7000",
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_790592-MLA32941170171_112019-O.jpg",
+    "id": 2
+  },
+  {
+    "title": "Casco RS11",
+    "price": "10000",
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_678757-MLA47891037713_102021-O.webp",
+    "id": 3
+  },
+  {
+    "title": "Bandera Boca",
+    "price": "1000",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScNZxXiEpfLXQjl1OYM8zjmtVwLKlqbHB3b9_0oHgO&s",
+    "id": 4
+  }
+]
