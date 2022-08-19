@@ -2,10 +2,10 @@ const fs = require ('fs');
 class Contenedor {
     constructor(ruta){
         this.ruta = ruta
-    }
+    }   
 
     async save(obj){
-       
+
         try {
         if (fs.existsSync(this.ruta)){
         let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
@@ -26,6 +26,8 @@ class Contenedor {
             return
         }
     
+    
+
     } catch (error) {
         console.log(error)
     }
