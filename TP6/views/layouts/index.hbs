@@ -41,7 +41,7 @@
         <tr>
             <td>{{title}}</td>
             <td>${{price}}</td>
-            <td><img src="{{thumbnail}}" style="max-width: 5rem;" class="card-img-top" alt="{{thumbnail}}"></td>
+            <td><img src={{thumbnail}} style="max-width: 5rem;" class="card-img-top" alt={{thumbnail}}></td>
             {{/each}}
         </tr>
         </tbody>
@@ -56,21 +56,47 @@
         </div>
 </div>
 <br>
-<form method="POST" action="http://localhost:8080/"></form>
 <div class="container" style="background-color:#e9ecef">
     <br>
     <h2 style="color:blue">Chat</h2>
-    <div class="form-group">
-      <label for="email">Ingrese su Email:</label>
-      <input type="text" class="form-control" required="required" name="email" placeholder="Email" />
-  </div>
-  <div class="form-group">
-      <label for="comentario">Ingrese su comentario</label>
-    <input type="text"  class="form-control" required="required" name="comentario" placeholder="Comentario" />
-     <br>
-    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
-      </form>
-  </div>
+
+    <form onsubmit= "return addMessage(this)" class="mt-5">
+        <div class="form-group">
+            <label for="mail"></label>
+            <input required="required"
+                type="email"
+                class="form-control col-6"
+                id="mail"
+                placeholder="Ingresa tu correo"
+            />
+        </div>
+        <br>
+        <ul id="chat"></ul>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="mensaje"></label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="mensaje"
+                            placeholder="Ingresa un mensaje"
+                        />
+                    </div>
+                </div>
+                <div class="col-6" style="padding-top: 23px;">
+                    <input
+							type="submit"
+							class="btn btn-primary col-3"
+							value="Enviar!"
+						/>
+                </div>
+            </div>
+        </div>         
+	</form>
+    <br>
+</div>
 
 
 

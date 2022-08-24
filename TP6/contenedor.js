@@ -1,113 +1,115 @@
-const fs = require ('fs');
-class Contenedor {
-    constructor(ruta){
-        this.ruta = ruta
-    }
+const fs = require("fs");
 
-    async readFileFunction(ruta) {
+class Contenedor {
+	constructor(ruta) {
+		this.ruta = ruta;
+	}
+
+	async readFileFunction(ruta) {
 		let archivo = await fs.promises.readFile(ruta, "utf8");
 		let archivoParsed = await JSON.parse(archivo);
 		return archivoParsed;
-    }
+	}
 
-    async save(obj) {
+	async save(obj) {
 		try {
 			let dataArchivo = await this.readFileFunction(this.ruta);
 			if (dataArchivo.length) {
-				await fs.promises.writeFile(this.ruta, JSON.stringify([...dataArchivo, { ...obj, id: dataArchivo.length + 1 }], null, 2 )
-            )} else { await fs.promises.writeFile(this.ruta, JSON.stringify([{ ...obj, id: dataArchivo.length + 1 }], null, 2))
+				// [].length = 0 -> false
+				await fs.promises.writeFile(
+					this.ruta,
+					JSON.stringify(
+						[...dataArchivo, { ...obj, id: dataArchivo.length + 1 }],
+						null,
+						2
+					)
+				);
+				// ... spread operator -> copia el array y lo agrega al final
+			} else {
+				await fs.promises.writeFile(
+					this.ruta,
+					JSON.stringify([{ ...obj, id: dataArchivo.length + 1 }], null, 2)
+				);
 				console.log(`El archivo tiene id: ${dataArchivo.length + 1}`);
 			}
-	    } catch (error) {
-		    console.log("error de escritura", error);
-	    }
-    }
+		} catch (error) {
+			console.log("error de escritura", error);
+		}
+	}
 
-    async updateById(obj) {
-        try {
-            let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
-            let dataArchivoParse = await JSON.parse(dataArchivo)
-            const ObjIndex = dataArchivoParse.findIndex((producto) => producto.id === obj.id)
-            if (ObjIndex !== -1) {
-                dataArchivoParse [ObjIndex] = obj
-                await fs.promises.writeFile(this.ruta, JSON.stringify (dataArchivoParse, null, 2))
-                return (1)
-            } else  {
-                return {error: 'No existe el producto'}
-            }
-        } catch (error) {
-            console.log(error)
-            return (0)
-        }
-    }
+	async updateById(obj) {
+		try {
+			let dataArch = await this.readFileFunction(this.ruta);
+			const objIndex = dataArch.findIndex(prod => prod.id === obj.id);
+			if (objIndex !== -1) {
+				// existe
+				dataArch[objIndex] = obj;
+				await fs.promises.writeFile(
+					this.ruta,
+					JSON.stringify(dataArch, null, 2)
+				);
+				return { message: "producto actualizado" };
+			} else {
+				// no existe
+				return { error: "producto no encontrado" };
+			}
+		} catch (error) {
+			console.log("error de lectura", error);
+		}
+	}
 
+	// traer producto por id
+	async getById(id) {
+		try {
+			const dataArchivo = await this.readFileFunction(this.ruta);
+			const producto = dataArchivo.find(producto => producto.id === id);
+			if (producto) {
+				return producto;
+			} else {
+				return { error: "producto no encontrado" };
+			}
+		} catch (error) {
+			console.log("no existe el id", error);
+		}
+	}
 
-    async getById(id){
-        try {
-            let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
-            let dataArchivoParse = JSON.parse(dataArchivo)
-            let producto = dataArchivoParse.find(producto => producto.id === id)
-            if (producto) {
-                console.log(producto)
-                return producto
-            } else {
-                console.log('No se encontro el producto')
-                return null
-            } 
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async getAll(){
-        try {
-            let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
-            let dataArchivoParse = JSON.parse(dataArchivo)
-            if (dataArchivoParse.length) {
-                console.log(dataArchivoParse)
-                return dataArchivoParse
-            } else {
-                console.log('No hay productos')
-            }
-        } catch (error) {
-            console.log(error)
-            return null
-        }
-    }
-
-    async deleteById(id) {
-        try {
-            let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
-            let dataArchivoParse = JSON.parse(dataArchivo)
-            if (dataArchivoParse.length === 1) {
-                await fs.promises.writeFile(this.ruta, '' , 'utf-8')
-                console.log('Se elimino el producto correctamente, ya no hay productos cargados')
-                return 
-            }
-            let producto = dataArchivoParse.find(producto => producto.id === id)
-            if (producto) {
-                let dataArchivoParseBorrar = dataArchivoParse.filter (producto => producto.id !== id)
-                await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParseBorrar, null, 2), 'utf-8')
-                console.log('Producto eliminado')
-                return 1
-            } else {
-                console.log('No se encontro el producto')
-                return 0
-            } 
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async deleteAll(){
-        try {
-            await fs.promises.writeFile(this.ruta, '' , 'utf-8')
-            console.log('Se han eliminado todos los productos')
-            return null
-        } catch (error) {
-            console.log (error)
-        }
-    }
+	//traer todos los productos
+	async getAll() {
+		try {
+			const dataArchivo = await this.readFileFunction(this.ruta);
+			if (dataArchivo.length) {
+				//console.log(dataArchParse);
+				return dataArchivo;
+			} else {
+				console.log("No hay productos");
+                return dataArchivo;
+			}
+		} catch (error) {
+			console.log("error de lectura", error);
+		}
+	}
+	// eliminar producto por id
+	async deleteById(id) {
+		try {
+			const dataArchivo = await this.readFileFunction(this.ruta);
+			let producto = dataArchivo.find(producto => producto.id === id);
+			if (producto) {
+				const dataArchParseFiltrado = dataArchivo.filter(
+					prod => prod.id !== id
+				);
+				await fs.promises.writeFile(
+					this.ruta,
+					JSON.stringify(dataArchParseFiltrado, null, 2),
+					"utf-8"
+				);
+				console.log("Producto eliminado");
+			} else {
+				console.log("No se encontró producto");
+			}
+		} catch (error) {
+			console.log("No existe el id", error);
+		}
+	}
 }
 
-module.exports = Contenedor;
+module.exports = { Contenedor };
