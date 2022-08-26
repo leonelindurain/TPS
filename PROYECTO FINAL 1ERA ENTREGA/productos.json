@@ -1,0 +1,52 @@
+[
+  {
+    "nombre": "Gorra Rosa",
+    "precio": 1000,
+    "thumbnail": "https://m.media-amazon.com/images/I/613Mz2SQZnL._AC_UX425_.jpg",
+    "codigo": "GR1",
+    "stock": 20,
+    "descripcion": "Gorra rosa comun de tela fina, con visera doblada",
+    "fecha": "16:17:04",
+    "id": 1
+  },
+  {
+    "nombre": "Gorra Blanca",
+    "precio": 1000,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_677306-MLA48168328631_112021-W.jpg",
+    "codigo": "GR5",
+    "stock": 60,
+    "descripcion": "PRUEBA DEL PUT",
+    "id": 2,
+    "fecha": "17:14:05"
+  },
+  {
+    "id": 4,
+    "fecha": "17:13:13",
+    "nombre": "Gorra Blanca",
+    "precio": 1000,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_677306-MLA48168328631_112021-W.jpg",
+    "codigo": "GR5",
+    "stock": 60,
+    "descripcion": "PRUEBA DEL PUT"
+  },
+  {
+    "nombre": "Gorra Blanca",
+    "precio": 1000,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_677306-MLA48168328631_112021-W.jpg",
+    "codigo": "GR5",
+    "stock": 60,
+    "descripcion": "PRUEBA DEL PUT",
+    "id": 6,
+    "fecha": "17:00:42"
+  },
+  {
+    "nombre": "Gorra Blanca",
+    "precio": 1000,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_677306-MLA48168328631_112021-W.jpg",
+    "codigo": "GR5",
+    "stock": 60,
+    "descripcion": "PRUEBA DEL PUT",
+    "fecha": "17:16:14",
+    "id": 5
+  }
+]

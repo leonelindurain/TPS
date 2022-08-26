@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>INGRESAR PRODUCTOS NUEVOS</title>
+	</head>
+	<body>
+		<h1>Ingresar Productos Nuevos</h1>
+		<form method="POST" action="http://localhost:8080/api/productos">
+			<input type="text" name="nombre" placeholder="Nombre" />
+			<input type="number" name="precio" placeholder="Precio" />
+            <input type="text" name="descripcion" placeholder="Descripcion" />
+            <input type="text" name="codigo" placeholder="Codigo" />
+            <input type="number" name="stock" placeholder="Stock" />
+			<input type="text" name="thumbnail" placeholder="Ruta de imagen" />
+			<button type="submit">Ingresa producto</button>
+		</form>
+	</body>
+</html
