@@ -95,17 +95,13 @@ class Contenedor {
 
 	async updateById(obj) {
 		try {
-			let dataArch = await this.readFileFunction(this.ruta);
+			const dataArch = await this.readFileFunction(this.ruta);
 			const objIndex = dataArch.findIndex(prod => parseInt(prod.id) === parseInt(obj.id));
 			dataArch[objIndex] = obj;
-			if (objIndex > 0 ) {
-				// existe
-				await fs.promises.writeFile(
-					this.ruta,
-					JSON.stringify([...dataArch], null, 2));
+			if (dataArch.length > 0 ) {
+				await fs.promises.writeFile(this.ruta,JSON.stringify([...dataArch], null, 2));
 				return obj.id
 			} else {
-				// no existe
 				return objIndex
 			}
 		} catch (error) {
