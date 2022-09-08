@@ -1,0 +1,129 @@
+use Ecommerce
+
+db.createCollection("Productos")
+
+db.createCollection("Mensajes")
+
+db.Mensajes.insertMany([{
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Hola"
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Todo bien ?"
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Recien cargue unos articulos nuevos!"
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Espero que se entienda."
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Saludos!"
+                        },
+                        {
+                            mail: "chiwanitochalasko@gmail.com"
+                            mensaje: "Hola Leonel!"
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Todo bien, por suerte."
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Si, estaba viendo eso."
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Muchas gracias!"
+                        },
+                        {
+                            mail: "leonelindurain95@gmail.com"
+                            mensaje: "Saludos!"
+                        }])
+
+db.Productos.insertMany([{
+                            title: "Producto 1",
+                            price: 120,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 2",
+                            price: 580,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 3",
+                            price: 900,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 4",
+                            price: 1280,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 5",
+                            price: 1700,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 6",
+                            price: 2300,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 7",
+                            price: 2860,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 8",
+                            price: 3350,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 9",
+                            price: 4320,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        },
+                        {
+                            title: "Producto 10",
+                            price: 4990,
+                            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+                        }])
+
+db.Productos.find().pretty()
+
+db.Mensajes.find().pretty()
+
+db.Productos.countDocuments()
+
+db.Mensajes.countDocuments()
+
+db.Productos.insertOne({
+				            title: "Producto 11",
+				            price: 2500,
+				            thumbnail: https://us.123rf.com/450wm/martialred/martialred1708/martialred170800094/84587578-etiqueta-de-producto-nuevo-sello-etiqueta-o-estallido-icono-de-vector-plano-para-sitios-web-y-embala.jpg?ver=6"
+			            })
+
+db.Productos.find({"price": {$lt: 1000}})
+
+db.Productos.find({$and: [{"price": {$gte: 1000}}, {"price": {$lte: 3000}}]})
+
+db.Productos.find({"price": {$gt: 3000}})
+
+db.Productos.find().skip(2).limit(1).sort({"price": 1})
+
+db.Productos.updateMany({},{$set: {"Stock": 10}}, {upsert:true})
+
+db.Productos.updateMany({"price": {$gt:4000}}, {$set: {"Stock": 0}})
+
+db.Productos.deleteMany({"price": {$lt: 1000}})
+
+use admin
+
+db.createUser({"user": "pepe", "pwd": "asd456", "roles": [{"role": "read", "db": "Ecommerce"}]})
