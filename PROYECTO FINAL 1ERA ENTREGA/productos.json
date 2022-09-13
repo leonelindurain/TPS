@@ -20,23 +20,13 @@
     "id": 3
   },
   {
-    "nombre": "Gorra Rosa",
-    "precio": 1000,
-    "thumbnail": "https://m.media-amazon.com/images/I/613Mz2SQZnL._AC_UX425_.jpg",
-    "codigo": "GR1",
-    "stock": 20,
-    "descripcion": "Gorra rosa comun de tela fina, con visera doblada",
-    "fecha": "17:02:29",
-    "id": 4
-  },
-  {
     "nombre": "PRUEBA PUT",
     "precio": 9999999,
     "thumbnail": "PRUEBA PUT",
     "codigo": "PP1",
     "stock": 999999,
     "descripcion": "PRUEBA PUT",
-    "fecha": "17:12:42",
-    "id": 5
+    "fecha": "16:30:01",
+    "id": 4
   }
 ]

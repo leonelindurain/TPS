@@ -1,4 +1,4 @@
-DELETE http://localhost:8080/api/productos/2 HTTP/1.1 
+DELETE http://localhost:8080/api/carrito/1/productos/1 HTTP/1.1 
 Content-Type: application/json
 
 {
@@ -7,5 +7,7 @@ Content-Type: application/json
     "thumbnail": "PRUEBA PUT",
     "codigo": "PP1",
     "stock": 999999,
-    "descripcion": "PRUEBA PUT"
+    "descripcion": "PRUEBA PUT",
+    "fecha": "17:12:17",
+    "id": 2
 }
