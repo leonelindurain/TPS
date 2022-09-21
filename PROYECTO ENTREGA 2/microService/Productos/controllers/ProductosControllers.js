@@ -1,7 +1,8 @@
 const { response } = require("express")
-const ContenedorArchivo = require("../../Contenedores/ContenedorArchivo.js")
+const productosDao = require("../../switch.js")
+const productosApi = productosDao
 
-const contenedorProductos = new ContenedorArchivo("./productos.json")
+const contenedorProductos = new productosApi()
 const isAdmin = true
 
 const getProduct = async (req,res = response) => {

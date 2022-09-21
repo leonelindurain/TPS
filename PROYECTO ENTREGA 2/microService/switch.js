@@ -26,3 +26,9 @@ switch (process.env.PRES) {
     default:
         break;
 }
+
+module.exports = {
+
+    productosDao,
+    carritosDao
+}

@@ -1,7 +1,8 @@
 const { response } = require("express")
-const ContenedorArchivo = require("../../Contenedores/ContenedorArchivo.js")
+const carritosDao = require("../../switch.js")
+const carritosApi = carritosDao
 
-const contenedorCarrito = new ContenedorArchivo("./carrito.json")
+const contenedorCarrito = new carritosApi()
 
 const getCart = async (req,res = response) => {
     const { id } = req.params
@@ -20,7 +21,6 @@ const postProductCart = async (req,res = response) => {
     const { id } = req.params;
 	const objCarrito = req.body;
 	console.log(objCarrito);
-	const contenedorCarrito = new Contenedor ("./carrito.json")
 	carritoByID = await contenedorCarrito.addProductToCart(id, objCarrito)
 	res.json({ message: "Producto guardado", carritoByID })
 }
