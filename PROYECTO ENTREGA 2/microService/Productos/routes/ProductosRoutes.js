@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { getProduct, getProductId, postProduct, putProduct, deleteProduct } = require("../controllers/ProductosControllers")
+const { getProduct, getProductId, postProduct, putProduct, deleteProduct } = require("../controllers/ProductosController")
 
 const routerProductos = Router()
 

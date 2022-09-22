@@ -1,4 +1,5 @@
 const ContenedorArchivo = require("../../Contenedores/ContenedorArchivo.js")
+const fs = require("fs")
 
 class CarritoDaoArchivo extends ContenedorArchivo {
     constructor() {

@@ -1,3 +1,42 @@
 [
-
+  {
+    "nombre": "PRUEBA PUT",
+    "precio": 9999999,
+    "thumbnail": "PRUEBA PUT",
+    "codigo": "PP1",
+    "stock": 999999,
+    "descripcion": "PRUEBA PUT",
+    "fecha": "17:12:17",
+    "id": 1
+  },
+  {
+    "nombre": "PRUEBA PUT",
+    "precio": 9999999,
+    "thumbnail": "PRUEBA PUT",
+    "codigo": "PP1",
+    "stock": 999999,
+    "descripcion": "PRUEBA PUT",
+    "fecha": "17:12:32",
+    "id": 2
+  },
+  {
+    "nombre": "PRUEBA PUT",
+    "precio": 9999999,
+    "thumbnail": "PRUEBA PUT",
+    "codigo": "PP1",
+    "stock": 999999,
+    "descripcion": "PRUEBA PUT",
+    "fecha": "17:13:01",
+    "id": 3
+  },
+  {
+    "nombre": "anashe",
+    "precio": "9999",
+    "descripcion": "asdasdasdas",
+    "codigo": "PR1",
+    "stock": "123",
+    "thumbnail": "https://www.nexon.com.ar/media/catalog/product/cache/2/image/9df78eab33525d08d6e5fb8d27136e95/h/5/h5_2.jpg",
+    "fecha": "16:40:00",
+    "id": 4
+  }
 ]

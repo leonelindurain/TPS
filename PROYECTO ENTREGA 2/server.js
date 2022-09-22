@@ -1,6 +1,7 @@
 const express = require ('express')
 const routerCarrito = require('./microService/Carrito/routes/CarritoRoutes')
 const routerProductos = require('./microService/Productos/routes/ProductosRoutes')
+require("dotenv").config()
 
 const app = express()
 

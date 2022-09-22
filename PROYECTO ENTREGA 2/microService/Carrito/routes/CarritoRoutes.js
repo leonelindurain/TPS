@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { postCart, deleteCart, getCart, postProductCart, deleteProductCart } = require("../controllers/CarritoControllers")
+const { postCart, deleteCart, getCart, postProductCart, deleteProductCart } = require("../controllers/CarritoController")
 
 const routerCarrito = Router()
 

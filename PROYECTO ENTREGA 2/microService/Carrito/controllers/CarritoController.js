@@ -1,8 +1,8 @@
 const { response } = require("express")
-const carritosDao = require("../../switch.js")
-const carritosApi = carritosDao
 
-const contenedorCarrito = new carritosApi()
+const { Carrito } = require("../../../switcher")
+
+const contenedorCarrito = new Carrito()
 
 const getCart = async (req,res = response) => {
     const { id } = req.params

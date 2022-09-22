@@ -1,9 +1,11 @@
 const ContenedorArchivo = require("../../Contenedores/ContenedorArchivo.js")
+const fs = require("fs")
 
 class ProductosDaoArchivo extends ContenedorArchivo {
     constructor() {
         super("./microService/DB/productos.json")
     }
+	
 
     async saveProducto(obj) {
 		try {

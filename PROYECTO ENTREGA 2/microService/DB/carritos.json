@@ -1,3 +1,28 @@
 [
-
-]
+    {
+      "id": 1,
+      "fecha": "16:31:46",
+      "productos": [
+        {
+          "id": 2,
+          "nombre": "PRUEBA PUT",
+          "precio": 9999999,
+          "thumbnail": "PRUEBA PUT",
+          "codigo": "PP1",
+          "stock": 999999,
+          "descripcion": "PRUEBA PUT",
+          "fecha": "17:12:17"
+        },
+        {
+          "id": 2,
+          "nombre": "PRUEBA PUT",
+          "precio": 9999999,
+          "thumbnail": "PRUEBA PUT",
+          "codigo": "PP1",
+          "stock": 999999,
+          "descripcion": "PRUEBA PUT",
+          "fecha": "17:12:17"
+        }
+      ]
+    }
+  ]

@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs")
 
 class ContenedorArchivo {
 	constructor(ruta) {
@@ -6,24 +6,24 @@ class ContenedorArchivo {
 	}
 
 	async readFileFunction(ruta) {
-		let archivo = await fs.promises.readFile(ruta, "utf8");
-		let archivoParsed = await JSON.parse(archivo);
+		let archivo = await fs.promises.readFile(ruta, "utf8")
+		let archivoParsed = await JSON.parse(archivo)
 		return archivoParsed;
 	}
 
 	async updateById(obj) {
 		try {
 			const dataArch = await this.readFileFunction(this.ruta);
-			const objIndex = dataArch.findIndex(prod => parseInt(prod.id) === parseInt(obj.id));
-			dataArch[objIndex] = obj;
+			const objIndex = dataArch.findIndex(prod => parseInt(prod.id) === parseInt(obj.id))
+			dataArch[objIndex] = obj
 			if (dataArch.length > 0 ) {
-				await fs.promises.writeFile(this.ruta,JSON.stringify([...dataArch], null, 2));
+				await fs.promises.writeFile(this.ruta,JSON.stringify([...dataArch], null, 2))
 				return obj.id
 			} else {
 				return objIndex
 			}
 		} catch (error) {
-			console.log("error de lectura", error);
+			console.log("error de lectura", error)
 		}
 	}
 
@@ -46,16 +46,16 @@ class ContenedorArchivo {
 
 	async getAll() {
 		try {
-			const dataArchivo = await this.readFileFunction(this.ruta);
+			const dataArchivo = await this.readFileFunction(this.ruta)
 			if (dataArchivo.length) {
-				//console.log(dataArchParse);
+				//console.log(dataArchParse)
 				return dataArchivo;
 			} else {
-				console.log("No hay productos");
+				console.log("No hay productos")
                 return dataArchivo;
 			}
 		} catch (error) {
-			console.log("error de lectura", error);
+			console.log("error de lectura", error)
 		}
 	}
 
