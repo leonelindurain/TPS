@@ -10,8 +10,6 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// ** Render con handlebars
-// ------------------------------ INICIO
 app.set("view engine", "hbs")
 app.set("views", "./views/layouts")
 
@@ -25,8 +23,7 @@ app.engine(
 		layoutsDir: "",
 		partialsDir: __dirname + "/views/partials"
 	})
-);
-// ---------------------------- FIN
+)
 
 const redisStore = connectRedis(session)
 
@@ -45,7 +42,7 @@ redisClient.on("connect", function (ok) {
 	console.log(`Redis conectado`)
 })
 redisClient.connect()
-//Configuramos el middleware
+
 app.use(
 	session({
 		store: new redisStore({ client: redisClient }),
@@ -59,7 +56,7 @@ app.use(
 	})
 )
 app.get("/", (req, res) => {
-	const sess = req.session
+	const sess = req.session;
 	if (sess.username && sess.password) {
 		res.write(`<h1>Bievenido ${sess.username} </h1><br>`)
 		res.end("<a href=" + "/logout" + ">Cerrar Sesion</a >")
@@ -68,14 +65,15 @@ app.get("/", (req, res) => {
 
 		res.render(currentPath + "/views/layouts/login.hbs")
 	}
-});
+})
 
-app.post("/login", (req, res) => {
-	const sess = req.session;
+app.post("/login", async (req, res) => {
+	const sess = req.session
 	const { username, password } = req.body
 	sess.username = username
 	sess.password = password
-	res.redirect("/")
+
+	await res.redirect("/")
 })
 app.get("/logout", (req, res) => {
 	req.session.destroy(err => {
