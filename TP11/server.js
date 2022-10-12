@@ -1,19 +1,43 @@
 const express = require("express")
-const session = require("express-session")
-const { createClient } = require("redis")
-const connectRedis = require("connect-redis")
-const dotenv = require("dotenv").config()
-
+require("dotenv").config()
 const handlebars = require("express-handlebars")
+const MongoStore = require("connect-mongo")
+const session = require("express-session")
+const cp = require("cookie-parser")
 
 const app = express()
+
+// --- WEBSOCKET
+const { Server: HttpServer } = require("http")
+const { Server: IoServer } = require("socket.io")
+const httpServer = new HttpServer(app)
+const io = new IoServer(httpServer)
+
+// --- middleware ----------------
+app.use(cp());
+const { generadorProductos } = require("./src/utils/generadorProducto")
+const checkAuthentication = require("./src/utils/checkAuthentication")
+const passport = require("./src/utils/passportMiddleware")
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static("public"))
+
+const PORT = process.env.PORT
+
+// meter productosRandom en la base datos, en la colección productos
+const productosRandoms = generadorProductos()
+const { Carrito, Producto, Login, Chat } = require("./src/daos/index.js")
+
+// --- Creación de objetos con DAOS ----------------
+const Carritos = new Carrito()
+let Productos = new Producto()
+
+const Logins = new Login()
+const Chats = new Chat()
 
 app.set("view engine", "hbs")
-app.set("views", "./views/layouts")
-
-app.use(express.static("public"))
+app.set("views", "./src/views/layouts")
 
 app.engine(
 	"hbs",
@@ -21,70 +45,271 @@ app.engine(
 		extname: ".hbs",
 		defaultLayout: "",
 		layoutsDir: "",
-		partialsDir: __dirname + "/views/partials"
+		partialsDir: __dirname + "/src/views/partials"
 	})
 )
-
-const redisStore = connectRedis(session)
-
-const redisClient = createClient({
-	socket: {
-		host: "redis-16907.c93.us-east-1-3.ec2.cloud.redislabs.com",
-		port: 16907
-	},
-	password: "6IiNNTWU1RsiSRksKItfGmQMHIm7vF9d",
-	legacyMode: true
-})
-redisClient.on("error", function (err) {
-	console.log(`Redis error: ${err} no se puede conectar`)
-})
-redisClient.on("connect", function (ok) {
-	console.log(`Redis conectado`)
-})
-redisClient.connect()
 
 app.use(
 	session({
-		store: new redisStore({ client: redisClient }),
-		secret: "secret",
+		store: MongoStore.create({
+			mongoUrl:
+				"mongodb+srv://admin:chmod777@cluster0.z9jlepu.mongodb.net/?retryWrites=true&w=majority",
+			mongoOptions: {
+				useNewUrlParser: true,
+				useUnifiedTopology: true
+			}
+		}),
+		secret: "secreto",
 		resave: false,
-		saveUninitialized: false,
+		rolling: true,
 		cookie: {
+			htppOnly: false,
 			secure: false,
-			httpOnly: false
-		}
+			maxAge: 90000
+		},
+		rolling: true,
+		resave: true,
+		saveUninitialized: false
 	})
 )
-app.get("/", (req, res) => {
-	const sess = req.session;
-	if (sess.username && sess.password) {
-		res.write(`<h1>Bievenido ${sess.username} </h1><br>`)
-		res.end("<a href=" + "/logout" + ">Cerrar Sesion</a >")
-	} else {
-		var currentPath = process.cwd()
 
-		res.render(currentPath + "/views/layouts/login.hbs")
+// Passport
+app.use(passport.initialize())
+app.use(passport.session())
+
+// página de inicio, no dejar si no está logeado
+app.get("/", checkAuthentication, async (req, res) => {
+	const productos = await Productos.getAll()
+	res.render("index", { productos })
+})
+
+// -------- LOGIN-INICIO ------------
+// render login
+app.get("/login", (req, res) => {
+	if (req.isAuthenticated()) {
+		let user = req.user
+		console.log("usuario logueado")
+		res.render("index")
+	} else {
+		console.log("user no logueado")
+		res.render("login")
+	}
+})
+// post de login
+app.post(
+	"/login",
+	passport.authenticate("login", {
+		successRedirect: "/",
+		failureRedirect: "faillogin"
+	}),
+
+	(req, res) => {
+		const { user } = req.user
+		res.redirect("/")
+	}
+)
+// -------- LOGIN-FIN --------------
+
+// -------- REGISTER-INICIO --------
+
+// render register
+app.get("/register", (req, res) => {
+	res.render("register")
+})
+// post para registrarse
+app.post(
+	"/register",
+	passport.authenticate("register", {
+		failureRedirect: "failregister",
+		successRedirect: "login"
+	}),
+	(req, res) => {
+		const user = req.user
+		res.redirect("/")
+	}
+)
+// -------- REGISTER-FIN -----------
+
+// error de registro
+app.get("/failregister", (req, res) => {
+	console.error("Error de registro")
+	// now redirect to failregister.hbs
+	res.render("failregister")
+})
+
+// error de login
+app.get("/faillogin", (req, res) => {
+	console.error("Error de login")
+	res.render("faillogin")
+})
+
+// logout
+app.get("/logout", async (req, res) => {
+	// metodo debe ser delete
+	req.logOut()
+	res.render("index")
+})
+
+// -------- PARTE PRODUCTOS -- INICIO ---------------
+app.get("/api/productos", async (req, res) => {
+	const producto = await productosRandoms;
+	// y también quiero que lea de la base de dato si hay algo
+	const productosDB = await Productos.getAll();
+	const productosConRandoms = [...producto, ...productosDB];
+	res.render("productos", {
+		list: productosConRandoms,
+		listExist: true,
+		producto: true
+	})
+})
+
+// GET trae 1 o todos los productos
+app.get("/api/productos/:id?", (req, res) => {
+	const { id } = req.params
+
+	if (id) {
+		Productos.getById(id).then(data => {
+			res.json(data)
+		})
+	} else {
+		Productos.getAll().then(data => {
+			res.json(data)
+		})
 	}
 })
 
-app.post("/login", async (req, res) => {
-	const sess = req.session
-	const { username, password } = req.body
-	sess.username = username
-	sess.password = password
-
-	await res.redirect("/")
+// POST crea 1 producto
+app.post("/api/productos", checkAuthentication, async (req, res) => {
+	let timestamp = Date.now()
+	let { title, price, thumbnail } = req.body
+	let producto = {
+		title,
+		price,
+		thumbnail,
+		timestamp
+	};
+	await Productos.save(producto)
+	res.json({ id: data })
 })
-app.get("/logout", (req, res) => {
-	req.session.destroy(err => {
-		if (err) {
-			return console.log(err)
-		}
-		res.redirect("/")
+
+// PUT modifica 1 producto
+app.put("/api/productos/:id", checkAuthentication, (req, res) => {
+	let timestamp = Date.now()
+	let { title, price, thumbnail } = req.body
+	let producto = {
+		title,
+		price,
+		thumbnail,
+		timestamp
+	}
+	Productos.updateById(producto).then(data => {
+		res.json({ id: data })
 	})
 })
 
-const PORT = process.env.PORT || 4000
-app.listen(PORT, () => {
-	console.log(`escuchando el puerto ${PORT}`)
+// DELETE borra 1 producto
+app.delete("/api/productos/:id", checkAuthentication, async (req, res) => {
+	const { id } = req.params
+
+	Productos.deleteById(id).then(data => {
+		res.json({ delete: data })
+	})
+})
+// -------- PARTE CARRITOSS -- INICIO ---------------
+// POST crea 1 carrito
+app.post("/api/carrito", (req, res) => {
+	let timestamp = Date.now()
+	let { title, price, thumbnail } = req.body;
+	let producto = {
+		title,
+		price,
+		thumbnail,
+		timestamp
+	}
+	Carritos.save(producto).then(data => {
+		res.json({ id: data })
+	})
+})
+
+// Delete borra 1 carrito completo
+app.delete("/api/carrito/:id", (req, res) => {
+	const { id } = req.params
+
+	//Carritos.borrarPorId(parseInt(id))
+	Carritos.deleteById(id).then(data => {
+		res.json({ delete: id })
+	})
+})
+
+// GET lista de productos de 1 carrito
+app.get("/api/carrito/:id/productos", (req, res) => {
+	const { id } = req.params
+	Carritos.getById(id).then(data => {
+		res.json(data)
+	})
+})
+
+// POST guardar 1 producto en 1 carrito
+app.post("/api/carrito/:id/productos", (req, res) => {
+	const { id } = req.params
+	const { id_prod } = req.body
+
+	Productos.getById(id_prod).then(productoData => {
+		Carritos.save(id, productoData).then(data => {
+			res.json(data)
+		})
+	})
+})
+
+// DELETE borra 1 producto de 1 carrito
+app.delete("/api/carrito/:id/productos/:id_prod", (req, res) => {
+	const { id, id_prod } = req.params
+
+	Carritos.deleteById(id, id_prod).then(data => {
+		res.json(data)
+	})
+})
+// -------- PARTE CARRITOSS -- FIN ---------------
+
+// cualquier ruta que no exista
+app.use("/api/*", (req, res) => {
+	res.json({
+		error: -2,
+		descripcion: `ruta '${req.path}' método '${req.method}' no implementada`
+	})
+})
+
+/* ------------ CHAT ------------ */
+io.on("connection", async socket => {
+	let mensajesChat = await Chats.getAll()
+	console.log("Se contectó un usuario")
+
+	const text = {
+		text: "ok",
+		mensajesChat
+	}
+
+	socket.emit("mensaje-servidor", text)
+
+	socket.on("mensaje-nuevo", async (msg, cb) => {
+		mensajesChat.push(msg);
+		const text = {
+			text: "mensaje nuevo",
+			mensajesChat
+		}
+
+		io.sockets.emit("mensaje-servidor", text)
+		await Chats.save({
+			mail,
+			msg,
+			fecha
+		})
+		return (mensajesChat = await Chats.getAll())
+	})
+})
+// ---------------------------- FIN
+
+//--------- listener
+httpServer.listen(PORT, () => {
+	console.log(`Server listening on ${PORT}`)
 })
