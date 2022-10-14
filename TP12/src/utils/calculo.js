@@ -1,20 +1,22 @@
-const calculoPesado = (cantidad) => {
-    const randomNumbers = []
-    for (let i = 0; i < cantidad; i++) {
-      const numbers = Math.floor(Math.random() * 1000 + 1)
-      randomNumbers.push(numbers)
-    }
-    console.log("Calculo terminado!")
-    console.log(randomNumbers)
+function calculo() {
+	let obj = {};
+	let nro = "";
+	let cant = 100000000;
+	if (process.argv[2] !== "undefined") {
+		cant = process.argv[2];
+	}
 
-    const repetidos = {}
-
-    randomNumbers.forEach(function (x) {
-      repetidos[x] = (repetidos[x] || 0) + 1
-    });
-    console.log(repetidos)
-
-    return repetidos
+	for (let i = 0; i < cant; i++) {
+		nro = Math.floor(Math.random() * 1000 + 1);
+		if (obj[nro]) {
+			obj[nro] = ++obj[nro];
+		} else {
+			obj[nro] = 1;
+		}
+	}
+	return obj;
 }
 
-module.exports = { calculoPesado }
+process.on("message", function (message) {
+	process.send(calculo());
+});

@@ -1,16 +1,15 @@
 const express = require("express")
 require("dotenv").config()
+const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process
 const handlebars = require("express-handlebars")
 const MongoStore = require("connect-mongo")
 const session = require("express-session")
 const cp = require("cookie-parser")
-const { faker } = require("@faker-js/faker")
+const { fork } = require("child_process")
 
-const { PORT, MONGOURL, SECRET } = process.env
+const calculoPesado = require("./src/utils/calculo")
 
 const app = express()
-
-const { routerRandom } = require('./src/routers/routerRandom')
 
 // --- WEBSOCKET
 const { Server: HttpServer } = require("http")
@@ -28,6 +27,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 
+const PORT = process.env.PORT || 8080
+
 // meter productosRandom en la base datos, en la colección productos
 const productosRandoms = generadorProductos()
 const { Carrito, Producto, Login, Chat } = require("./src/daos/index.js")
@@ -38,6 +39,12 @@ let Productos = new Producto()
 
 const Logins = new Login()
 const Chats = new Chat()
+
+const User = new Login()
+
+User.getAll().then(asdas => {
+	console.log("estoy intentando obtener mis usuarios: ", asdas)
+})
 
 app.set("view engine", "hbs")
 app.set("views", "./src/views/layouts")
@@ -55,23 +62,21 @@ app.engine(
 app.use(
 	session({
 		store: MongoStore.create({
-			mongoUrl: MONGOURL,
+			mongoUrl: process.env.MONGODB_URL,
 			mongoOptions: {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
 			}
 		}),
-		secret: SECRET,
+		secret: process.env.MONGODB_SECRETO || "secreto",
 		resave: false,
 		rolling: true,
+		saveUninitialized: false,
 		cookie: {
-			htppOnly: false,
+			httpOnly: false,
 			secure: false,
 			maxAge: 90000
-		},
-		rolling: true,
-		resave: true,
-		saveUninitialized: false
+		}
 	})
 )
 
@@ -106,14 +111,12 @@ app.post(
 	}),
 
 	(req, res) => {
-		const { user } = req.user
-		res.redirect("/")
+		res.render("/", { username: req.body.username })
 	}
 )
 // -------- LOGIN-FIN --------------
 
 // -------- REGISTER-INICIO --------
-
 // render register
 app.get("/register", (req, res) => {
 	res.render("register")
@@ -126,8 +129,7 @@ app.post(
 		successRedirect: "login"
 	}),
 	(req, res) => {
-		const user = req.user
-		res.redirect("/")
+		res.render("/login", { username: req.body.username })
 	}
 )
 // -------- REGISTER-FIN -----------
@@ -136,42 +138,20 @@ app.post(
 app.get("/failregister", (req, res) => {
 	console.error("Error de registro")
 	// now redirect to failregister.hbs
-	res.render("failregister")
+	res.render("failregister");
 })
 
 // error de login
 app.get("/faillogin", (req, res) => {
-	console.error("Error de login")
-	res.render("faillogin")
+	console.error("Error de login");
+	res.render("faillogin");
 })
 
 // logout
 app.get("/logout", async (req, res) => {
 	// metodo debe ser delete
-	req.logOut()
-	res.render("index")
-})
-
-app.get("/info", loginCheck, (req, res) => {
-	const info = {
-	  path: process.cwd(),
-	  processId: process.pid,
-	  nodeVersion: process.version,
-	  titulo: process.tittle,
-	  sistema: process.platform,
-	  memory: process.memoryUsage.rss(),
-	  file: __dirname,
-	};
-	// info.keys = Object.keys(info);
-	console.log(
-	  "Directorio actual de trabajo:" + process.cwd() + "\n",
-	  "Id del Proceso:" + process.pid + "\n",
-	  "Version de Node:" + process.version + "\n",
-	  "Titulo del proceso:" + process.tittle + "\n",
-	  "Sistema Operativo:" + process.platform + "\n",
-	  "Uso de la Memoria:" + process.memoryUsage.rss() + "\n"
-	);
-	res.send(info)
+	req.logOut();
+	res.render("index");
 })
 
 // -------- PARTE PRODUCTOS -- INICIO ---------------
@@ -243,7 +223,7 @@ app.delete("/api/productos/:id", checkAuthentication, async (req, res) => {
 // POST crea 1 carrito
 app.post("/api/carrito", (req, res) => {
 	let timestamp = Date.now()
-	let { title, price, thumbnail } = req.body;
+	let { title, price, thumbnail } = req.body
 	let producto = {
 		title,
 		price,
@@ -294,14 +274,6 @@ app.delete("/api/carrito/:id/productos/:id_prod", (req, res) => {
 	})
 })
 // -------- PARTE CARRITOSS -- FIN ---------------
-app.use('/', routerRandom)
-// cualquier ruta que no exista
-app.use("/api/*", (req, res) => {
-	res.json({
-		error: -2,
-		descripcion: `ruta '${req.path}' método '${req.method}' no implementada`
-	})
-})
 
 /* ------------ CHAT ------------ */
 io.on("connection", async socket => {
@@ -316,7 +288,7 @@ io.on("connection", async socket => {
 	socket.emit("mensaje-servidor", text)
 
 	socket.on("mensaje-nuevo", async (msg, cb) => {
-		mensajesChat.push(msg);
+		mensajesChat.push(msg)
 		const text = {
 			text: "mensaje nuevo",
 			mensajesChat
@@ -331,7 +303,33 @@ io.on("connection", async socket => {
 		return (mensajesChat = await Chats.getAll())
 	})
 })
-// ---------------------------- FIN
+// ---------------------------- FIN CARRITO -------------
+
+// ----- INFO PAGE ----
+app.get("/info", (req, res) => {
+	const arguments = argv.slice(2).join(" || ")
+
+	res.render("info", {
+		execArgv: arguments.length ? arguments : "Ninguno",
+		platform,
+		version,
+		memoryUsage: memoryUsage().rss,
+		cwd: cwd(),
+		pid,
+		execPath
+	})
+})
+
+// ----- Random PAGE ----
+app.get("/api/randoms", (req, res) => {
+	let { cant } = req.query
+	console.log(cant)
+	const random = fork("./src/utils/calculo", [cant])
+	random.send("start")
+	random.on("message", obj => {
+		res.json(obj)
+	})
+})
 
 //--------- listener
 httpServer.listen(PORT, () => {
