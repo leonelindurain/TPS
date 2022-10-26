@@ -5,7 +5,7 @@ const mongoConnect = require("../../utils/mongoconnect.js")
 const loginsCollections = "logins"
 
 const LoginSchema = new mongoose.Schema({
-	username: { type: String, require: true },
+	username: { type: String, require: true, unique: true },
 	password: { type: String, require: true }
 })
 
@@ -18,14 +18,11 @@ class LoginDaoMongoDB extends ContenedorMongodb {
 
 	// getByMail
 	async getByUser(username) {
-		const doc = await this.modelo.findOne({ username: username })
+		const doc = await this.modelo.findOne({ username })
 		if (!doc) return null; //si no hay nada null
 		// retornar el objeto completo
-		return {
-			_id: doc._id,
-			username: doc.username
-		}
+		return doc
 	}
 }
 
-module.exports = LoginDaoMongoDB
+module.exports = LoginDaoMongoDB;

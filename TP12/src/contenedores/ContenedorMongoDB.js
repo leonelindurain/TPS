@@ -13,11 +13,8 @@ class ContenedorMongoDB {
 
 	async save(obj) {
 		try {
-			let guardar = await new this.modelo(obj)
-				.save()
-				.then("objeto guardado")
-				.catch(err => console.log(err))
-			return guardar
+			let guardar = new this.modelo(obj)
+			await guardar.save()
 		} catch (error) {
 			console.log(`error al guardar: ${error}`)
 		} finally {
@@ -27,7 +24,7 @@ class ContenedorMongoDB {
 	// traer producto por id
 	async getById(id) {
 		try {
-			let datos = await this.modelo.findOne({ _id: id });
+			let datos = await this.modelo.findOne({ _id: id })
 			let newDatos = { ...datos._doc, id: datos._id.toString() }
 			return newDatos
 		} catch (error) {

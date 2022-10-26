@@ -1,15 +1,13 @@
-const express = require("express")
-require("dotenv").config()
-const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process
-const handlebars = require("express-handlebars")
-const MongoStore = require("connect-mongo")
-const session = require("express-session")
-const cp = require("cookie-parser")
-const { fork } = require("child_process")
+const express = require("express");
+require("dotenv").config();
+const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process;
+const handlebars = require("express-handlebars");
+const MongoStore = require("connect-mongo");
+const session = require("express-session");
+const cp = require("cookie-parser");
+const { fork } = require("child_process");
 
-const calculoPesado = require("./src/utils/calculo")
-
-const app = express()
+const app = express();
 
 // --- WEBSOCKET
 const { Server: HttpServer } = require("http")
@@ -41,10 +39,6 @@ const Logins = new Login()
 const Chats = new Chat()
 
 const User = new Login()
-
-User.getAll().then(asdas => {
-	console.log("estoy intentando obtener mis usuarios: ", asdas)
-})
 
 app.set("view engine", "hbs")
 app.set("views", "./src/views/layouts")
@@ -94,12 +88,12 @@ app.get("/", checkAuthentication, async (req, res) => {
 // render login
 app.get("/login", (req, res) => {
 	if (req.isAuthenticated()) {
-		let user = req.user
-		console.log("usuario logueado")
-		res.render("index")
+		let user = req.user;
+		console.log("usuario logueado");
+		res.render("index");
 	} else {
-		console.log("user no logueado")
-		res.render("login")
+		console.log("user no logueado");
+		res.render("login");
 	}
 })
 // post de login
@@ -138,20 +132,23 @@ app.post(
 app.get("/failregister", (req, res) => {
 	console.error("Error de registro")
 	// now redirect to failregister.hbs
-	res.render("failregister");
+	res.render("failregister")
 })
 
 // error de login
 app.get("/faillogin", (req, res) => {
-	console.error("Error de login");
-	res.render("faillogin");
+	console.error("Error de login")
+	res.render("faillogin")
 })
 
 // logout
-app.get("/logout", async (req, res) => {
-	// metodo debe ser delete
-	req.logOut();
-	res.render("index");
+app.get("/logout", async (req, res = response, next) => {
+	req.logout(err => {
+		if (err) {
+			return next(err)
+		}
+		res.redirect("/")
+	})
 })
 
 // -------- PARTE PRODUCTOS -- INICIO ---------------
@@ -191,7 +188,7 @@ app.post("/api/productos", checkAuthentication, async (req, res) => {
 		price,
 		thumbnail,
 		timestamp
-	};
+	}
 	await Productos.save(producto)
 	res.json({ id: data })
 })
