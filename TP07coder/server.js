@@ -1,5 +1,6 @@
 const express = require("express")
 const handlebars = require("express-handlebars")
+const {faker} = require("@faker-js/faker")
 
 const { Contenedor } = require("./contenedor")
 const { Server: HttpServer } = require("http")

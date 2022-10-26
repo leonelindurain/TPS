@@ -19,7 +19,13 @@
     <div class="container" style="background-color:#e9ecef">
 
 
+
         <h1 style="color:blue">Ingrese producto</h1>
+
+        <div class="logout">
+            <span>¡Bienvenido! {{username}}</span>
+            <a href="/logout">logout</a>
+        </div>
         <br>
 
         {{>form}}
@@ -71,7 +77,8 @@
             <form onsubmit="return addMessage(this)" class="mt-5">
                 <div class="form-group">
                     <label for="mail"></label>
-                    <input required type="email" class="form-control col-6" id="mail" placeholder="Ingresa tu correo" />
+                    <input required type="email" class="form-control col-6" id="mail" placeholder="Ingresa tu correo"
+                        name="mail" />
                 </div>
 
                 <div class="container">
@@ -79,7 +86,8 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="msg"></label>
-                                <input type="msg" class="form-control" id="msg" placeholder="Ingresa un mensaje" />
+                                <input type="msg" class="form-control" id="msg" placeholder="Ingresa un mensaje"
+                                    name="msg" />
                             </div>
                         </div>
                         <div class="col-6" style="padding-top: 23px;">
@@ -120,8 +128,9 @@
                 chat.innerHTML = html.join("");
             };
             const addMessage = evt => {
+                evt.preventDefault();
                 const mail = document.querySelector("#mail").value;
-                let hora = new Date().toLocaleTimeString();
+                let fecha = new Date().toLocaleTimeString();
                 const mensaje = document.querySelector("#msg").value;
                 const chatText = { mail, fecha, mensaje };
                 server.emit("mensaje-nuevo", chatText, id => {

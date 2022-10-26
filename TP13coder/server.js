@@ -1,13 +1,13 @@
-const express = require("express")
-require("dotenv").config()
-const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process
-const handlebars = require("express-handlebars")
-const MongoStore = require("connect-mongo")
-const session = require("express-session")
-const cp = require("cookie-parser")
-const { fork } = require("child_process")
-
-const calculoPesado = require("./src/utils/calculo")
+const express = require("express");
+require("dotenv").config();
+const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process;
+const handlebars = require("express-handlebars");
+const MongoStore = require("connect-mongo");
+const session = require("express-session");
+const cp = require("cookie-parser");
+const { fork } = require("child_process");
+const cluster = require("cluster");
+const numCPUs = require("os").cpus().length;
 
 const app = express()
 
@@ -18,7 +18,7 @@ const httpServer = new HttpServer(app)
 const io = new IoServer(httpServer)
 
 // --- middleware ----------------
-app.use(cp());
+app.use(cp())
 const { generadorProductos } = require("./src/utils/generadorProducto")
 const checkAuthentication = require("./src/utils/checkAuthentication")
 const passport = require("./src/utils/passportMiddleware")
@@ -41,10 +41,6 @@ const Logins = new Login()
 const Chats = new Chat()
 
 const User = new Login()
-
-User.getAll().then(asdas => {
-	console.log("estoy intentando obtener mis usuarios: ", asdas)
-})
 
 app.set("view engine", "hbs")
 app.set("views", "./src/views/layouts")
@@ -138,20 +134,23 @@ app.post(
 app.get("/failregister", (req, res) => {
 	console.error("Error de registro")
 	// now redirect to failregister.hbs
-	res.render("failregister");
+	res.render("failregister")
 })
 
 // error de login
 app.get("/faillogin", (req, res) => {
-	console.error("Error de login");
-	res.render("faillogin");
+	console.error("Error de login")
+	res.render("faillogin")
 })
 
 // logout
-app.get("/logout", async (req, res) => {
-	// metodo debe ser delete
-	req.logOut();
-	res.render("index");
+app.get("/logout", async (req, res = response, next) => {
+	req.logout(err => {
+		if (err) {
+			return next(err)
+		}
+		res.redirect("/")
+	})
 })
 
 // -------- PARTE PRODUCTOS -- INICIO ---------------
@@ -191,7 +190,7 @@ app.post("/api/productos", checkAuthentication, async (req, res) => {
 		price,
 		thumbnail,
 		timestamp
-	};
+	}
 	await Productos.save(producto)
 	res.json({ id: data })
 })
@@ -219,6 +218,8 @@ app.delete("/api/productos/:id", checkAuthentication, async (req, res) => {
 		res.json({ delete: data })
 	})
 })
+// -------- PARTE PRODUCTOS -- INICIO ---------------
+
 // -------- PARTE CARRITOSS -- INICIO ---------------
 // POST crea 1 carrito
 app.post("/api/carrito", (req, res) => {
@@ -300,7 +301,7 @@ io.on("connection", async socket => {
 			msg,
 			fecha
 		})
-		return (mensajesChat = await Chats.getAll())
+		return (mensajesChat = await Chats.getAll());
 	})
 })
 // ---------------------------- FIN CARRITO -------------
@@ -316,7 +317,8 @@ app.get("/info", (req, res) => {
 		memoryUsage: memoryUsage().rss,
 		cwd: cwd(),
 		pid,
-		execPath
+		execPath,
+		numCPUs
 	})
 })
 
