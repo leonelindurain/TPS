@@ -1,0 +1,12 @@
+######## FORK #######
+
+pm2 start server.js --name="server fork" --watch -- -p 8080
+
+######## CLUSTER #######
+
+pm2 start server.js --name="Server Cluster" -i max --watch -- 8080
+
+pm2 start server.js --name="Server Cluster One" -i 1 --watch -- -p 8081
+pm2 start server.js --name="Server Cluster One" -i 1 --watch -- -p 8082
+pm2 start server.js --name="Server Cluster One" -i 1 --watch -- -p 8083
+pm2 start server.js --name="Server Cluster One" -i 1 --watch -- -p 8084
