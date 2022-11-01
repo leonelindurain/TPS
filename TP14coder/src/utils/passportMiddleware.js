@@ -23,7 +23,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
 	console.log("deserializing...")
 	const user = User.getById(id)
-	done(null, user);
+	done(null, user)
 })
 
 // ------------- Passport Middlewares -----------------

@@ -1,13 +1,13 @@
-const express = require("express");
-require("dotenv").config();
-const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process;
-const handlebars = require("express-handlebars");
-const MongoStore = require("connect-mongo");
-const session = require("express-session");
-const cp = require("cookie-parser");
-const { fork } = require("child_process");
-const cluster = require("cluster");
-const numCPUs = require("os").cpus().length;
+const express = require("express")
+require("dotenv").config()
+const { argv, platform, version, memoryUsage, cwd, pid, execPath } = process
+const handlebars = require("express-handlebars")
+const MongoStore = require("connect-mongo")
+const session = require("express-session")
+const cp = require("cookie-parser")
+const { fork } = require("child_process")
+const cluster = require("cluster")
+const numCPUs = require("os").cpus().length
 
 const app = express()
 
@@ -32,6 +32,12 @@ const PORT = process.env.PORT || 8080
 // meter productosRandom en la base datos, en la colección productos
 const productosRandoms = generadorProductos()
 const { Carrito, Producto, Login, Chat } = require("./src/daos/index.js")
+
+// minimist
+const minimist = require("minimist")
+
+// LOG4JS
+const logger = require("./src/logs/loggers")
 
 // --- Creación de objetos con DAOS ----------------
 const Carritos = new Carrito()
@@ -75,6 +81,12 @@ app.use(
 		}
 	})
 )
+
+// logger
+app.use((req,res,next)=>{
+	logger.warn("NONE EXISTING URL")
+	res.sendStatus('404')
+  })
 
 // Passport
 app.use(passport.initialize())
@@ -157,8 +169,8 @@ app.get("/logout", async (req, res = response, next) => {
 app.get("/api/productos", async (req, res) => {
 	const producto = await productosRandoms;
 	// y también quiero que lea de la base de dato si hay algo
-	const productosDB = await Productos.getAll();
-	const productosConRandoms = [...producto, ...productosDB];
+	const productosDB = await Productos.getAll()
+	const productosConRandoms = [...producto, ...productosDB]
 	res.render("productos", {
 		list: productosConRandoms,
 		listExist: true,
@@ -212,13 +224,12 @@ app.put("/api/productos/:id", checkAuthentication, (req, res) => {
 
 // DELETE borra 1 producto
 app.delete("/api/productos/:id", checkAuthentication, async (req, res) => {
-	const { id } = req.params
+	const { id } = req.params;
 
 	Productos.deleteById(id).then(data => {
-		res.json({ delete: data })
+		res.json({ delete: data });
 	})
 })
-// -------- PARTE PRODUCTOS -- INICIO ---------------
 
 // -------- PARTE CARRITOSS -- INICIO ---------------
 // POST crea 1 carrito
@@ -301,7 +312,7 @@ io.on("connection", async socket => {
 			msg,
 			fecha
 		})
-		return (mensajesChat = await Chats.getAll());
+		return (mensajesChat = await Chats.getAll())
 	})
 })
 // ---------------------------- FIN CARRITO -------------
@@ -321,6 +332,32 @@ app.get("/info", (req, res) => {
 		numCPUs
 	})
 })
+
+if (mode === "fork") {
+	app.use("/api", routerRandom);
+	httpServer.listen(port, () => {
+	  console.log(
+		`Corriendo en modo Fork en el puerto http://localhost:${port} en modo  ${process.env.NODE_ENV}`
+	  )
+	})
+  }
+  if (mode === "cluster") {
+	if (isMaster) {
+	  for (let i = 0; i < cpus; i++) {
+		cluster.fork();
+	  }
+	  cluster.on("exit", (worker) => {
+		console.log(`Process with id: ${worker.process.pid} finished`)
+	  });
+	} else {
+	  app.use("/test", routerCluster);
+	  httpServer.listen(port, () => {
+		console.log(
+		  `Corriendo en modo Cluster en el puerto http://localhost:${port} en modo ${process.env.NODE_ENV}`
+		)
+	  })
+	}
+  }
 
 // ----- Random PAGE ----
 app.get("/api/randoms", (req, res) => {
