@@ -1,0 +1,52 @@
+[
+  {
+    "nombre": "Lapiz",
+    "precio": "150",
+    "descripcion": "Lapiz Negro C/Goma",
+    "codigo": "A001",
+    "stock": "100",
+    "thumbnail": "https://i1.wp.com/www.notar.com.ar/wp-content/uploads/2019/02/lapices-negros-con-goma-copia-.jpg",
+    "fecha": "14:20:44",
+    "id": 1
+  },
+  {
+    "nombre": "Goma",
+    "precio": "50",
+    "descripcion": "Goma Borrar",
+    "codigo": "A002",
+    "stock": "100",
+    "thumbnail": "https://image.shutterstock.com/image-photo/rubber-eraser-pencil-ink-pen-260nw-656520052.jpg",
+    "fecha": "14:23:39",
+    "id": 2
+  },
+  {
+    "nombre": "Regla",
+    "precio": "200",
+    "descripcion": "Regla 20 CM",
+    "codigo": "A003",
+    "stock": "100",
+    "thumbnail": "https://previews.123rf.com/images/nikiteev/nikiteev1708/nikiteev170800102/84640766-vector-ilustraci%C3%B3n-plana-individual-regla-verde-claro-herramienta-de-la-escuela-.jpg",
+    "fecha": "14:24:34",
+    "id": 3
+  },
+  {
+    "nombre": "Saca Puntas",
+    "precio": "150",
+    "descripcion": "Saca Puntas Metal",
+    "codigo": "A004",
+    "stock": "100",
+    "thumbnail": "http://d3ugyf2ht6aenh.cloudfront.net/stores/601/518/products/sacapuntas21-ad53caa4d36a3f0d4c15916415026078-640-0.jpg",
+    "fecha": "14:25:32",
+    "id": 4
+  },
+  {
+    "nombre": "Compas",
+    "precio": "400",
+    "descripcion": "Compas Metal",
+    "codigo": "A005",
+    "stock": "100",
+    "thumbnail": "https://ar.maped.com/wp-content/uploads/sites/34/2021/09/maped-compasses-school-compass-study-lead-flowpack-1-1.jpg",
+    "fecha": "14:26:10",
+    "id": 5
+  }
+]
