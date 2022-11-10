@@ -19,9 +19,8 @@ class LoginDaoMongoDB extends ContenedorMongodb {
 	// getByMail
 	async getByUser(username) {
 		const doc = await this.modelo.findOne({ username })
-		if (!doc) return null; //si no hay nada null
-		// retornar el objeto completo
-		return doc;
+		if (!doc) return null
+		return doc
 	}
 }
 

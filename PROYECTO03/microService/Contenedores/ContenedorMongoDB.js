@@ -8,12 +8,22 @@ class ContenedorMongoDB {
     }
 
     connexion() {
-        	mongoose.connect(this.url, {
+        	mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
         console.log("MongoDB: base de datos conectada")
     }
+
+	async save(obj) {
+		try {
+			let guardar = new this.modelo(obj);
+			await guardar.save();
+		} catch (error) {
+			console.log(`error al guardar: ${error}`);
+		} finally {
+		}
+	}
 
     async getById(id) {
 		try {

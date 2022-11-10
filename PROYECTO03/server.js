@@ -21,6 +21,10 @@ app.use(express.static('public'))
 
 const PORT = process.env.PORT || 8080
 
+// LOG4JS //
+
+const logger = require("./microService/logs/loggers")
+
 app.set("view engine", "hbs")
 app.set("views", "./public/views/layouts")
 app.engine(
@@ -28,7 +32,7 @@ app.engine(
 	handlebars.engine({
 		extname: ".hbs",
 		defaultLayout: "",
-		layoutsDir: "",
+		layoutsDir: "./public/viwes/layouts",
 		partialsDir: __dirname + "/public/views/partials"
 	})
 )
@@ -63,7 +67,7 @@ app.use(passport.session())
 const ContenedorProductos = require('./microService/Productos/Daos/ProductosDaoMongoDB')
 const contenedorProductos = new ContenedorProductos
 
-app.get("/", checkAuthentication, async (req, res) => {
+app.get("/", async (req, res) => {
 	const productos = await contenedorProductos.getAll();
 	res.render("index", { productos });
 })

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose")
-const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, './.env') })
+require('dotenv').config()
 
-const mongoConnect = async () => {
+const mongoConnect = () => {
 	try {
 		mongoose.connect(process.env.MONGODB_URL, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true
+		useNewUrlParser: true,
+		useFindAndModify: false,
+		useUnifiedTopology: true
 		})
 		console.log("MongoDb conectado")
 	} catch (error) {
@@ -14,4 +14,4 @@ const mongoConnect = async () => {
 	}
 }
 
-module.exports = mongoConnect
+module.exports = {mongoConnect}

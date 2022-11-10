@@ -6,9 +6,6 @@ const carritosCollection = "carritos"
 
 const carritosSchema = new mongoose.Schema({
     tittle: {type: String, require: true},
-    thumbnail: {type: String, require: true},
-    price: {type: Number, require: true},
-    stock: {type: Number, require: true}
 })
 
 const carritos = mongoose.model(carritosCollection, carritosSchema)
