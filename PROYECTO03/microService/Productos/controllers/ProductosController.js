@@ -1,35 +1,35 @@
 const ContenedorProductos = require("../Daos/ProductosDaoMongoDB")
 const contenedorProductos = new ContenedorProductos()
 
-const getProduct = async (req,res = response) => {
-    const productos = await contenedorProductos.getAll();
-    res.json ({ productos })
+const getProduct = async (req,res) => {
+    await contenedorProductos.getAll()
+    res.render("products")
 }
 
-const getProductId = async (req,res = response) => {
+const getProductId = async (req,res) => {
     const { id } = req.params
-    const producto = await contenedorProductos.getById(parseInt(id))
-    res.json ({ producto })
+    await contenedorProductos.getById(parseInt(id))
+    res.render("productos")
 }
 
-const postProduct = (req,res = response) => {
-        const objProducto = req.body
-        contenedorProductos.saveProducto(objProducto)
-        res.json ({ mensaje: 'Producto guardado', objProducto})
+const postProduct = (req,res) => {
+    const objProducto = req.body
+    contenedorProductos.save(objProducto)
+    res.render("productos")
 }
 
-const putProduct = (req,res = response) => {
-        let hora = new Date().toLocaleTimeString()
-        const { id } = req.params
-        const objProducto = req.body
-        contenedorProductos.updateById({...objProducto, fecha: hora, id: parseInt(id)})
-        res.json({ mensaje: 'Producto actualizado'})
+const putProduct = (req,res) => {
+    let hora = new Date().toLocaleTimeString()
+    const { id } = req.params
+    const objProducto = req.body
+    contenedorProductos.updateById({...objProducto, fecha: hora, id: parseInt(id)})
+    res.render("productos")
 }
 
-const deleteProduct = (req,res = response) => {
-        const { id } = req.params
-        contenedorProductos.deleteById(parseInt(id))
-        res.json ({ mensaje: 'Producto eliminado'})
+const deleteProduct = (req,res) => {
+    const { id } = req.params
+    contenedorProductos.deleteById(parseInt(id))
+    res.render("productos")
 }
 
 module.exports = {

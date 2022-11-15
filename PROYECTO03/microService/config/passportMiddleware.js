@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt")
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 
-const UserContainer = require("../Login/Daos/LoginDaoMongoDB")
+const UserContainer = require("../Login-Logout-Register/Daos/LoginDaoMongoDB")
 const User = new UserContainer()
 
 // ---------------------- Utils -----------------------
@@ -55,6 +55,11 @@ passport.use(
 		{
 			usernameField: "username",
 			passwordField: "password",
+			firstnameFiels: "firstname",
+			adressField: "adress",
+			ageField: "age",
+			phonenumberField: "phonenumber",
+			thumbnailField: "thumbnail",
 			passReqToCallback: true
 		},
 		async (req, username, password, done) => {

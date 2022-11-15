@@ -9,12 +9,15 @@ require("dotenv").config()
 
 const app = express()
 
+const { routerLogs } = require('./microService/Login-Logout-Register/routes/RoutesLogin')
+const { routerProductos } = require('./microService/Productos/routes/RoutesProductos')
+const { routerCarrito } = require('./microService/Carrito/routes/RoutesCarrito')
+const { routerProfile } = require('./microService/Profile/routes/RoutesProfile')
+
 // MIDDLEWARE //
 
 app.use(cp())
-const checkAuthentication = require("./microService/config/checkAuthentication")
 const passport = require("./microService/config/passportMiddleware")
-
 app.use(express.urlencoded({ extends: true}))
 app.use(express.json())
 app.use(express.static('public'))
@@ -32,7 +35,7 @@ app.engine(
 	handlebars.engine({
 		extname: ".hbs",
 		defaultLayout: "",
-		layoutsDir: "./public/viwes/layouts",
+		layoutsDir: "/public/views/layouts",
 		partialsDir: __dirname + "/public/views/partials"
 	})
 )
@@ -64,94 +67,12 @@ app.use(passport.session())
 
 // INICIO //
 
-const ContenedorProductos = require('./microService/Productos/Daos/ProductosDaoMongoDB')
-const contenedorProductos = new ContenedorProductos
-
 app.get("/", async (req, res) => {
-	const productos = await contenedorProductos.getAll();
-	res.render("index", { productos });
+	res.render("index")
 })
 
-// REGISTER //
-
-app.get("/register", (req, res) => {
-	res.render("register")
-})
-
-app.post(
-	"/register",
-	passport.authenticate("register", {
-		failureRedirect: "failregister",
-		successRedirect: "login"
-	}),
-	(req, res) => {
-		res.render("/login", { username: req.body.username })
-	}
-)
-
-app.get("/failregister", (req, res) => {
-	console.error("Error de Registro")
-	res.render("failregister")
-})
-
-// LOGIN //
-
-app.get("/login", (req, res) => {
-	if (req.isAuthenticated()) {
-		let user = req.user
-		console.log("Usuario Logueado")
-		res.render("index")
-	} else {
-		console.log("Usuario no logueado")
-		res.render("login")
-	}
-})
-
-app.post(
-	"/login",
-	passport.authenticate("login", {
-		successRedirect: "/",
-		failureRedirect: "faillogin"
-	}),
-
-	(req, res) => {
-		res.render("/", { username: req.body.username })
-	}
-)
-
-// LOGOUT //
-
-app.get("/logout", async (req, res = response, next) => {
-	req.logout(err => {
-		if (err) {
-			return next(err)
-		}
-		res.redirect("/")
-	})
-})
-
-// CARRITO //
-
-const { postCart, deleteCart, getCart, postProductCart, deleteProductCart } = require("./microService/Carrito/controllers/CarritoController")
-const routerCarrito = Router()
-
-routerCarrito.post('/', postCart)
-routerCarrito.delete('/:id', deleteCart)
-routerCarrito.get('/:id/productos', getCart)
-routerCarrito.post("/:id/productos", postProductCart)
-routerCarrito.delete('/:idCart/productos/:idProduct', deleteProductCart)
-
-// PRODUCTOS //
-
-const { getProduct, getProductId, postProduct, putProduct, deleteProduct } = require("./microService/Productos/controllers/ProductosController")
-const routerProductos = Router()
-
-routerProductos.get('/', getProduct)
-routerProductos.get('/:id', getProductId)
-routerProductos.post('/', checkAuthentication, postProduct)
-routerProductos.put('/:id', checkAuthentication, putProduct)
-routerProductos.delete('/:id', checkAuthentication, deleteProduct)
-
+app.use('/profile', routerProfile)
+app.use('/logs', routerLogs)
 app.use('/api/productos', routerProductos)
 app.use('/api/carrito', routerCarrito)
 

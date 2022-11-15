@@ -5,7 +5,7 @@ const mongoConnect = require("../../config/mongodbconfig")
 const loginsCollections = "logins"
 
 const LoginSchema = new mongoose.Schema({
-	username: { type: String, require: true, unique: true },
+    username: { type: String, require: true, unique: true },
 	password: { type: String, require: true }
 })
 
@@ -16,10 +16,20 @@ class LoginDaoMongoDB extends ContenedorMongodb {
 		super(mongoConnect, logins)
 	}
 
-	// getByMail
 	async getByUser(username) {
 		const doc = await this.modelo.findOne({ username })
 		if (!doc) return null
+		return doc
+	}
+
+	async updateByUser(objUser,username) {
+		const doc = await this.modelo.updateOne({ username })
+		if (!doc) {
+		console.log("Usuario no encontrado")
+		return null
+		}
+		({ $setOnInsert: { ...objUser}})
+		console.log('Datos actualizados correctamente')
 		return doc
 	}
 }

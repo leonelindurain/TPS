@@ -16,55 +16,25 @@
 
     <br>
     <div class="container" style="background-color:#e9ecef">
-
-        <div class="logout">
             <span>¡Bienvenido! {{username}}</span>
-            <a href="/logout">logout</a>
-        </div>
+            <form action="/profile" method="GET" id="profile" class="mt-5">
+                <div class="col-6" style="padding-top: 23px;">
+                    <input type="submit" class="btn btn-success col-3" id="button" value="Perfil" />
+                </div>
+            </form>
+            <form action="/logout" method="GET" id="logout" class="mt-5">
+                <div class="col-6" style="padding-top: 23px;">
+                    <input type="submit" class="btn btn-success col-3" id="button" value="Logout" />
+                </div>
+            </form>
+            <form action="/api/productos" method="GET" id="products" class="mt-5">
+                <div class="col-6" style="padding-top: 23px;">
+                    <input type="submit" class="btn btn-success col-3" id="button" value="Productos" />
+                </div>
+            </form>
+
         <br>
         <br>
-        {{> title }}
-        <div class="container">
-            {{#if listExist}}
-            <div class="d-flex p-2 bd-highlight flex-wrap">
-
-
-                <table class="table table-dark" style="border-color: white;">
-                    <thead>
-                        <tr>
-                            <th scope="col"><b>Nombre</b> </th>
-                            <th scope="col"><b>Descripcion</b> </th>
-                            <th scope="col"><b>Codigo</b> </th>
-                            <th scope="col"><b>Precio</b> </th>
-                            <th scope="col"><b>Stock</b> </th>
-                            <th scope="col"> <b>Foto</b> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each list}}
-                        <tr>
-                            <td>{{title}}</td>
-                            <td>{{description}}</td>
-                            <td>{{code}}</td>
-                            <td>${{price}}</td>
-                            <td>{{stock}}</td>
-                            <td><img src="{{thumbnail}}" style="max-width: 5rem;" class="card-img-top"
-                                    alt="{{thumbnail}}"></td>
-                            {{/each}}
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-            {{else}}
-            <div class="d-flex p-2 bd-highlight flex-wrap">
-                <h1>No se encontraron elementos</h1>
-            </div>
-            {{/if}}
-        </div>
-    </div>
-    <br>
-
     <br>
         {{> footer }}
 
