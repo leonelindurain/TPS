@@ -3,10 +3,10 @@ const { postCart, deleteCart, getCart, postProductCart, deleteProductCart } = re
 
 const routerCarrito = Router()
 
-routerCarrito.post('/', postCart)
-routerCarrito.delete('/:id', deleteCart)
-routerCarrito.get('/:id/productos', getCart)
-routerCarrito.post("/:id/productos", postProductCart)
-routerCarrito.delete('/:idCart/productos/:idProduct', deleteProductCart)
+routerCarrito.post('/carrito', postCart)
+routerCarrito.delete('/carrito/:id', deleteCart)
+routerCarrito.get('/carrito/:id/productos', getCart)
+routerCarrito.post("/carrito/:id/productos", postProductCart)
+routerCarrito.delete('/carrito/:idCart/productos/:idProduct', deleteProductCart)
 
 module.exports = { routerCarrito }

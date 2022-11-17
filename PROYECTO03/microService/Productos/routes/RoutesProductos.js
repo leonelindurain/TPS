@@ -4,10 +4,10 @@ const checkAuthentication = require("../../config/checkAuthentication")
 
 const routerProductos = Router()
 
-routerProductos.get('/', getProduct)
-routerProductos.get('/:id', getProductId)
-routerProductos.post('/', checkAuthentication, postProduct)
-routerProductos.put('/:id', checkAuthentication, putProduct)
-routerProductos.delete('/:id', checkAuthentication, deleteProduct)
+routerProductos.get('/productos', getProduct)
+routerProductos.get('/productos/:id', getProductId)
+routerProductos.post('/productos', checkAuthentication, postProduct)
+routerProductos.put('/productos/:id', checkAuthentication, putProduct)
+routerProductos.delete('/productos/:id', checkAuthentication, deleteProduct)
 
 module.exports = { routerProductos }

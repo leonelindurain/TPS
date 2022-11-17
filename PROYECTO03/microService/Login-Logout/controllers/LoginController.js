@@ -14,11 +14,11 @@ const getLogin = (req, res) => {
 const postLogin =
 (passport.authenticate
         ("login", {
-            successRedirect: "/",
+            successRedirect: "index",
             failureRedirect: "faillogin"
         }),
     (req, res) => {
-        res.render("/", { username: req.body.username })
+        res.render('index',{ username: req.body.username })
     }
 )
 
@@ -39,30 +39,9 @@ const getLogout = (req, res = response, next) => {
 	})
 }
 
-const getRegister = (req, res) => {
-	res.render("register")
-}
-
-const getFailRegister = (req, res) => {
-	console.error("Error de Registro")
-	res.render("failregister")
-}
-
-const postRegister = (
-	passport.authenticate("register", {
-		failureRedirect: "failregister",
-		successRedirect: "login"
-	}),
-	(req, res) => {
-		res.render("/login", { username: req.body.username })
-	}
-)
 module.exports = {
     getLogin,
     getLogout,
     getFailLogin,
     postLogin,
-	getRegister,
-	getFailRegister,
-	postRegister
 }

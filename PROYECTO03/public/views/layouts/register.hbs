@@ -24,7 +24,7 @@
             <br>
             <h2 style="color:blue">Registrarse</h2>
 
-            <form action="/register" method="POST" id="register" class="mt-5">
+            <form action="/register" method="POST" id="register" class="mt-5" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="username"></label>
                     <input required type="email" class="form-control col-6" id="username" name="username"
@@ -34,6 +34,33 @@
                     <label for="password"></label>
                     <input required type="password" class="form-control col-6" id="password" autocomplete="on"
                         name="password" placeholder="Ingresa tu contraseña" />
+                </div>
+                <div class="form-group">
+                    <label for="fullName"></label>
+                    <input required type="text" class="form-control col-6" id="fullName" name="fullName"
+                        placeholder="Ingresa tu nombre y apellido" />
+                </div>
+                <div class="form-group">
+                    <label for="age"></label>
+                    <input required type="number" class="form-control col-6" id="age" name="age"
+                        placeholder="Ingresa tu edad" />
+                </div>
+                <div class="form-group">
+                    <label for="phone"></label>
+                    <input required type="number" class="form-control col-6" id="phone" name="phone"
+                        placeholder="Ingresa tu número, incluyendo prefijos" />
+                </div>
+                <div class="form-group">
+                    <label for="address"></label>
+                    <input required type="text" class="form-control col-6" id="address" name="address"
+                        placeholder="Ingresa tu dirección" />
+                </div>
+                <div class="form-group">
+                    <label for="img"></label>
+                    <input required type="file" class="form-control col-6" id="img" name="img"
+                        placeholder="Ingresa tu avatar en formato .jpg" />
+                </div>
+
                 <div class="col-6" style="padding-top: 23px;">
                     <input type="submit" class="submit btn btn-success col-3" id="button" value="Registrarse" />
                 </div>
@@ -47,10 +74,10 @@
 
     <div class="login container">
         <p>¿Ya tienes tu cuenta?</p>
-        <a href="login.hbs">Ingresar</a>
+        <a href="login">Ingresar</a>
     </div>
 
-    {{> footer }}
+    {{ footer }}
 
     {{!-- boot strap --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"

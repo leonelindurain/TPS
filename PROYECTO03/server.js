@@ -9,11 +9,11 @@ require("dotenv").config()
 
 const app = express()
 
-const { routerLogs } = require('./microService/Login-Logout-Register/routes/RoutesLogin')
+const { routerLogin } = require('./microService/Login-Logout/routes/RoutesLogin')
 const { routerProductos } = require('./microService/Productos/routes/RoutesProductos')
 const { routerCarrito } = require('./microService/Carrito/routes/RoutesCarrito')
 const { routerProfile } = require('./microService/Profile/routes/RoutesProfile')
-
+const { routerRegister } = require('./microService/Register/routes/RoutesRegister')
 // MIDDLEWARE //
 
 app.use(cp())
@@ -68,13 +68,14 @@ app.use(passport.session())
 // INICIO //
 
 app.get("/", async (req, res) => {
-	res.render("index")
+	res.render("login")
 })
 
-app.use('/profile', routerProfile)
-app.use('/logs', routerLogs)
-app.use('/api/productos', routerProductos)
-app.use('/api/carrito', routerCarrito)
+app.use('/', routerProfile)
+app.use('/', routerLogin)
+app.use('/api', routerProductos)
+app.use('/api', routerCarrito)
+app.use('/', routerRegister)
 
 // LOGGER //
 

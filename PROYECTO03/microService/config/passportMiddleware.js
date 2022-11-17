@@ -2,8 +2,8 @@ const bcrypt = require("bcrypt")
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 
-const UserContainer = require("../Login-Logout-Register/Daos/LoginDaoMongoDB")
-const User = new UserContainer()
+const LoginDaoMongoDB = require("../Login-Logout/Daos/LoginDaoMongoDB")
+const User = new LoginDaoMongoDB()
 
 // ---------------------- Utils -----------------------
 const isValidPassword = (user, password) => {
@@ -55,11 +55,6 @@ passport.use(
 		{
 			usernameField: "username",
 			passwordField: "password",
-			firstnameFiels: "firstname",
-			adressField: "adress",
-			ageField: "age",
-			phonenumberField: "phonenumber",
-			thumbnailField: "thumbnail",
 			passReqToCallback: true
 		},
 		async (req, username, password, done) => {
@@ -72,7 +67,12 @@ passport.use(
 				} else {
 					const newUser = {
 						username: username,
-						password: createHash(password)
+						password: createHash(password),
+						fullName: req.body.fullName,
+						age: req.body.age,
+						phone: req.body.phone,
+						address: req.body.address,
+						img: req.body.img
 					}
 					await User.save(newUser)
 
