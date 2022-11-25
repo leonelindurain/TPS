@@ -17,55 +17,55 @@ class ContenedorMongoDB {
 
 	async save(obj) {
 		try {
-			let guardar = new this.modelo(obj);
-			await guardar.save();
+			let guardar = new this.modelo(obj)
+			await guardar.save()
 		} catch (error) {
-			console.log(`error al guardar: ${error}`);
+			console.log(`error al guardar: ${error}`)
 		} finally {
 		}
 	}
 
     async getById(id) {
 		try {
-			let datos = await this.modelo.findOne({ _id: id });
-			let newDatos = { ...datos._doc, id: datos._id.toString() };
-			return newDatos;
+			let datos = await this.modelo.findOne({ _id: id })
+			let newDatos = { ...datos._doc, id: datos._id.toString() }
+			return newDatos
 		} catch (error) {
-			return `No se pudo traer producto ${id}. ${error}`;
+			return `No se pudo traer producto ${id}. ${error}`
 		} finally {
 		}
     }
 
     async getAll() {
 		try {
-			let datos = await this.modelo.find({});
+			let datos = await this.modelo.find({})
 			let newDatos = datos.map(el => {
-				return { ...el._doc, id: el._id.toString() };
-			});
-			return newDatos;
+				return { ...el._doc, id: el._id.toString() }
+			})
+			return newDatos
 		} catch (error) {
-			console.log(`error al listar: ${error}`);
-			return [];
+			console.log(`error al listar: ${error}`)
+			return []
 		} finally {
 		}
 	}
 
     async deleteById(id) {
 		try {
-			let datos = await this.modelo.deleteOne({ _id: id });
-			return datos;
+			let datos = await this.modelo.deleteOne({ _id: id })
+			return datos
 		} catch (error) {
-			console.log(`error al eliminar: ${error}`);
+			console.log(`error al eliminar: ${error}`)
 		} finally {
 		}
 	}
 
     async updateById(obj) {
 		try {
-			await this.modelo.updateOne({ _id: obj.id }, { $set: { ...obj } });
-			return obj.id;
+			await this.modelo.updateOne({ _id: obj.id }, { $set: { ...obj } })
+			return obj.id
 		} catch (error) {
-			console.log(`error al actualizar: ${error}`);
+			console.log(`error al actualizar: ${error}`)
 		}
 	}
 

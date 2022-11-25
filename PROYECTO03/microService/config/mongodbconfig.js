@@ -14,4 +14,4 @@ const mongoConnect = () => {
 	}
 }
 
-module.exports = {mongoConnect}
+module.exports = { mongoConnect }
