@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const ContenedorMongodb = require("../../Contenedores/ContenedorMongoDB")
+const ContenedorMongodb = require("../../CONTENEDORES/ContenedorMongoDB")
 const mongoConnect = require("../../config/mongodbconfig")
 
 const loginsCollections = "logins"
@@ -11,7 +11,7 @@ const LoginSchema = new mongoose.Schema({
 	age: { type: Number, require: true },
 	phone: { type: Number, require: true },
 	address: { type: String, require: true },
-	img: { data: Buffer, type: String , require: true }
+	img: { type: String, require: true }
 })
 
 const logins = mongoose.model(loginsCollections, LoginSchema)

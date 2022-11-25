@@ -1,4 +1,4 @@
-const ContenedorCarrito = require("../Daos/CarritoDaoMongoDB")
+const ContenedorCarrito = require("../DAOS/DaoMongoDB/CarritoDaoMongoDB")
 const contenedorCarrito = new ContenedorCarrito()
 
 

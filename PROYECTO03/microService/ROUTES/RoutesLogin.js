@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { getLogin, getLogout, getFailLogin, postLogin, getRegister, getFailRegister, postRegister } = require("../controllers/LoginController")
+const { getLogin, getLogout, getFailLogin, postLogin, getRegister, getFailRegister, postRegister } = require("../CONTROLLERS/LoginController")
 const routerLogin = Router()
 
 routerLogin.get('/login', getLogin)

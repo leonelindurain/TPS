@@ -1,6 +1,6 @@
 const { Router } = require("express")
-const { getProduct, getProductId, postProduct, putProduct, deleteProduct } = require("../controllers/ProductosController")
-const checkAuthentication = require("../../config/checkAuthentication")
+const { getProduct, getProductId, postProduct, putProduct, deleteProduct } = require("../CONTROLLERS/ProductosController")
+const checkAuthentication = require("../MIDDLEWARES/checkAuthentication")
 
 const routerProductos = Router()
 

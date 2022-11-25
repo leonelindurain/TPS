@@ -5,12 +5,12 @@ const { Router } = express;
 
 const routerRegister = Router();
 
-const logger = require("../../logs/loggers");
+const logger = require("../LOGS/loggers");
 const nodemailer = require("nodemailer");
 
 const fs = require("fs");
 const path = require("path");
-const imagenesPath = require("../../img/img.path");
+const imagenesPath = require("../IMG/img.path");
 
 const twilio = require("twilio");
 
@@ -19,7 +19,7 @@ const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 const multer = require("multer");
 const upload = multer();
 
-const passport = require("../../config/passportMiddleware");
+const passport = require("../MIDDLEWARES/passportMiddleware");
 
 const transport = nodemailer.createTransport({
 	service: "gmail",

@@ -1,10 +1,10 @@
-const passport = require("../../config/passportMiddleware")
+const passport = require("../MIDDLEWARES/passportMiddleware")
 
 const getLogin = (req, res) => {
 	if (req.isAuthenticated()) {
 		let user = req.user
 		console.log("Usuario Logueado")
-		res.render("index")
+		res.render("index", {user})
 	} else {
 		console.log("Usuario no logueado")
 		res.render("login")
@@ -32,12 +32,9 @@ const getLogout = (req, res = response, next) => {
 		if (err) {
 			return next(err)
 		}
-		req.session.destroy((err) => {
-			console.log(err)
 			res.render("login")
 		})
-	})
-}
+	}
 
 module.exports = {
     getLogin,

@@ -13,39 +13,37 @@
 
 <body>
     <div class="cuadroUsuario container">
+    
         <h1>¡Bienvenido!</h1>
         {{!-- info del usuario --}}
-        <div class="logout">
-
-            <span>¡Bienvenido {{fullName}}!</span>
-            <a href="/logout">logout</a>
+        <div>
+            <span>¡Bienvenido!</span>
             <br>
             <br>
         </div>
+    
 
 
-        <div class="cuadro card" style="background-color:#e9ecef;width:30rem">
-
+        <div class="cuadro card" style="background-color:#457bb1;width:30rem">
 
             <div class="profilePic card-img">
-                <img src="{{#each this}}{{img}}{{/each}}" style="width:30rem;border-radius:6px" />
+                <img src="" style="width:30rem;border-radius:6px" />
             </div>
 
             <br>
             <div class="info">
-                <p><b>Nombre:</b> {{#each this}}{{fullName}}{{/each}}</p>
-                <p><b>Edad:</b> {{#each this}}{{age}}{{/each}} años</p>
-                <p><b>Mail:</b> {{#each this}}{{username}}{{/each}}</p>
-                <p><b>Teléfono:</b> {{#each this}}{{phone}}{{/each}}</p>
-                <p><b>Dirección:</b> {{#each this}}{{address}}{{/each}}</p>
+                <p><b>Nombre:</b></p>
+                <p><b>Edad:</b></p>
+                <p><b>Mail:</b></p>
+                <p><b>Teléfono:</b></p>
+                <p><b>Dirección:</b></p>
             </div>
         </div>
-
-
     </div>
+    
 
     <div class="container">
-        <a href="/">Volver al inicio</a>
+        <a href="/login">Volver al inicio</a>
     </div>
 
 

@@ -1,23 +1,24 @@
 const express = require ('express')
-const Router = require("express")
+require("dotenv").config()
+
 const handlebars = require("express-handlebars")
 const MongoStore = require("connect-mongo")
 const session = require("express-session")
 const cp = require("cookie-parser")
-const cluster = require("cluster")
-require("dotenv").config()
 
 const app = express()
 
-const { routerLogin } = require('./microService/Login-Logout/routes/RoutesLogin')
-const { routerProductos } = require('./microService/Productos/routes/RoutesProductos')
-const { routerCarrito } = require('./microService/Carrito/routes/RoutesCarrito')
-const { routerProfile } = require('./microService/Profile/routes/RoutesProfile')
-const { routerRegister } = require('./microService/Register/routes/RoutesRegister')
 // MIDDLEWARE //
 
 app.use(cp())
-const passport = require("./microService/config/passportMiddleware")
+const passport = require("./microService/MIDDLEWARES/passportMiddleware")
+
+const { routerLogin } = require('./microService/ROUTES/RoutesLogin')
+const { routerProductos } = require('./microService/ROUTES/RoutesProductos')
+const { routerCarrito } = require('./microService/ROUTES/RoutesCarrito')
+const { routerProfile } = require('./microService/ROUTES/RoutesProfile')
+const { routerRegister } = require('./microService/ROUTES/RoutesRegister')
+
 app.use(express.urlencoded({ extends: true}))
 app.use(express.json())
 app.use(express.static('public'))
@@ -26,7 +27,7 @@ const PORT = process.env.PORT || 8080
 
 // LOG4JS //
 
-const logger = require("./microService/logs/loggers")
+const logger = require("./microService/LOGS/loggers")
 
 app.set("view engine", "hbs")
 app.set("views", "./public/views/layouts")

@@ -1,4 +1,4 @@
-const ContenedorProductos = require("../Daos/ProductosDaoMongoDB")
+const ContenedorProductos = require("../DAOS/DaoMongoDB/ProductosDaoMongoDB")
 const contenedorProductos = new ContenedorProductos()
 
 const getProduct = async (req,res) => {
