@@ -115,10 +115,8 @@
             const render = mensajesChat => {
                 let chat = document.getElementById("chat");
                 let html = mensajesChat.map(mens => {
-                    let date = (mens.fecha._seconds * 1000);
-                    let formattedDate = new Date(date).toLocaleString()
                     return `<li><strong style="color:blue"> ${mens.mail} </strong>
-                    [<span style="color:brown">${formattedDate}</span>]:
+                    [<span style="color:brown">${mens.fecha}</span>]:
                     <em style="color:green"> ${mens.msg} </em>
                     </li>`;
                 }).sort((a, b) => {
@@ -130,11 +128,10 @@
             const addMessage = evt => {
                 evt.preventDefault();
                 const mail = document.querySelector("#mail").value;
-                let fecha = new Date().toLocaleTimeString();
                 const mensaje = document.querySelector("#msg").value;
                 const chatText = { mail, fecha, mensaje };
                 server.emit("mensaje-nuevo", chatText, id => {
-                    console.log(id);
+                    console.log(chatText);
                 });
                 return false;
             };

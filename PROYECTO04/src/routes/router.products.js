@@ -60,7 +60,7 @@ routerProductos.post(
 			timestamp
 		};
 		await Productos.save(producto);
-		res.json({ id: data });
+		res.render("producto");
 	}
 );
 

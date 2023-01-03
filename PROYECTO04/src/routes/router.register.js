@@ -1,5 +1,7 @@
+const path = require("path");
+
 const dotenv = require("dotenv");
-dotenv.config();
+dotenv.config({ path: path.join("../.env") });
 
 const express = require("express");
 const { Router } = express;
@@ -10,7 +12,6 @@ const logger = require("../logs/loggers");
 const nodemailer = require("nodemailer");
 
 const fs = require("fs");
-const path = require("path");
 const imagenesPath = require("../img/img.paths.js");
 
 const twilio = require("twilio");
