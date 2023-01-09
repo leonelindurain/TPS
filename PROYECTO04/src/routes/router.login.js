@@ -2,45 +2,28 @@ const express = require("express");
 const { Router } = express;
 const routerLogin = Router();
 const passport = require("../utils/passportMiddleware");
-const logger = require("../logs/loggers");
+
+const {
+	postLogin,
+	getLogin,
+	getFailedLogin,
+	getLogout
+} = require("../controllers/controller.logins");
 
 routerLogin.post(
 	"/login",
 	passport.authenticate("login", {
-		successRedirect: "/profile",
+		successRedirect: "/",
 		failureRedirect: "faillogin"
 	}),
-
-	(req, res) => {
-		logger.info("data Login");
-		res.render("/", { username: req.body.username });
-	}
+	postLogin
 );
 
-routerLogin.get("/login", (req, res) => {
-	if (req.isAuthenticated()) {
-		let user = req.user;
-		console.log("usuario logueado");
-		res.render("profile", { user });
-	} else {
-		console.log("user no logueado");
-		res.render("login");
-	}
-});
+routerLogin.get("/login", getLogin);
 
-routerLogin.get("/faillogin", (req, res) => {
-	logger.info("Error de Login");
-	res.render("faillogin");
-});
+routerLogin.get("/faillogin", getFailedLogin);
 
 // logout
-routerLogin.get("/logout", async (req, res = response, next) => {
-	req.logout(err => {
-		if (err) {
-			return next(err);
-		}
-		res.redirect("/");
-	});
-});
+routerLogin.get("/logout", getLogout);
 
 module.exports = { routerLogin };
