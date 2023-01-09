@@ -18,9 +18,6 @@ const io = new IoServer(httpServer);
 app.use(cp());
 const passport = require("./utils/passportMiddleware");
 
-const { graphqlHTTP } = require("express-graphql"); // GraphQL
-const routeProductGraphQL = require("./routes/router.products.gql"); // GraphQL
-
 // --- Routers ----
 const { routerHome } = require("./routes/router.home");
 const { routerProductos } = require("./routes/router.products");
@@ -29,7 +26,8 @@ const { routerLogin } = require("./routes/router.login");
 const { routerProfile } = require("./routes/router.profile");
 const { routerRegister } = require("./routes/router.register");
 const { routerInfo } = require("./routes/router.info");
-const { routerRandom } = require("./routes/router.random");
+const { routerChat } = require("./routes/router.chat");
+const { routerOrden } = require("./routes/router.orders.js");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,8 +39,6 @@ const { Chat } = require("./daos/index.js");
 
 // LOG4JS
 const logger = require("./logs/loggers");
-
-const Chats = new Chat();
 
 app.set("view engine", "hbs");
 app.set("views", "./src/views/layouts");
@@ -86,9 +82,11 @@ app.use(passport.session());
 // HOME
 app.use("/", routerHome);
 // PRODUCTOS
-app.use("/api", routerProductos);
+app.use("/productos", routerProductos);
 // CARRITO
-app.use("/api", routerCarrito);
+app.use("/carrito", routerCarrito);
+//ÓRDENES
+app.use("/ordenes", routerOrden);
 // LOGIN
 app.use("/", routerLogin);
 // PROFILE
@@ -97,48 +95,50 @@ app.use("/", routerProfile);
 app.use("/", routerRegister);
 // ----- INFO PAGE ----
 app.use("/", routerInfo);
-// ----- RANDOM PAGE ----
-app.use("/api", routerRandom);
-// ----- GRAPHQL ----
-app.use("/productGraphql", graphqlHTTP(routeProductGraphQL));
+// ----- CHAT ----
+app.use("/", routerChat);
 
 /* ------------ CHAT ------------ */
 io.on("connection", async socket => {
+	const Chats = new Chat();
 	let mensajesChat = await Chats.getAll();
-	console.log("Se contectó un usuario");
+	logger.info("Se contectó un usuario");
 
-	const text = {
-		text: "ok",
+	const mensaje = {
+		mensaje: "ok",
 		mensajesChat
 	};
 
-	socket.emit("mensaje-servidor", text);
+	socket.emit("mensaje-servidor", mensaje);
 
 	socket.on("mensaje-nuevo", async (msg, cb) => {
+		console.log(mensajesChat);
+
 		mensajesChat.push(msg);
-		const text = {
-			text: "mensaje nuevo",
+		console.log(mensajesChat);
+		const mensaje = {
+			mensaje: "mensaje nuevo",
 			mensajesChat
 		};
 
-		io.sockets.emit("mensaje-servidor", text);
+		const id = new Date().getTime();
+		io.sockets.emit("mensaje-servidor", mensaje);
+		cb(id);
 		await Chats.save({
-			mail,
-			msg,
-			fecha
+			id,
+			mail: msg.mail,
+			msg: msg.msg
 		});
-		return (mensajesChat = await Chats.getAll());
 	});
 });
-// ---------------------------- FIN CARRITO -------------
 
 // logger
-app.use((req, res, next) => {
-	logger.warn("NONE EXISTING URL");
+app.get("*", (req, res, next) => {
+	logger.error("ERROR 404 - NO ENCONTRADO");
 	res.sendStatus("404");
 });
 
 //--------- listener
 httpServer.listen(PORT, () => {
-	console.log(`Server listening on ${PORT}`);
+	logger.info(`Server listening on ${PORT}`);
 });
