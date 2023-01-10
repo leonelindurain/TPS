@@ -29,7 +29,7 @@ const transporter = createTransport({
 });
 
 const mailOptions = {
-	from: "Achurrita",
+	from: "Indu",
 	to: "leonelindurain95@gmail.com",
 	subject: "Nuevo usuario registrado",
 	html: `
