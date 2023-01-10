@@ -112,10 +112,10 @@ io.on("connection", async socket => {
 	socket.emit("mensaje-servidor", mensaje);
 
 	socket.on("mensaje-nuevo", async (msg, cb) => {
-		console.log(mensajesChat);
+		// console.log(mensajesChat);
 
 		mensajesChat.push(msg);
-		console.log(mensajesChat);
+		// console.log(mensajesChat);
 		const mensaje = {
 			mensaje: "mensaje nuevo",
 			mensajesChat

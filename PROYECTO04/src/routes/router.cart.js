@@ -3,29 +3,22 @@ const { Router } = express;
 const routerCarrito = Router();
 
 const {
-	postCartId,
-	deleteCartId,
-	getProductsFromCart,
-	postProductToCart,
-	deleteProductFromCart,
-	getCartByEmail
+	getCart,
+	addProductToCart,
+	deleteCartProduct,
+	comprarProduct
 } = require("../controllers/controller.carts");
 
-// --------- POST: Crea un carrito y devuelve su ID --------
-routerCarrito.post("/", postCartId);
+// --------- GET: get carrito --------
+routerCarrito.get("/", getCart);
 
-// --------- DELETE: Borra un carrito completo por ID -------
-routerCarrito.delete("/:id", deleteCartId);
-
-// GET lista de productos de 1 carrito
-routerCarrito.get("/:id/productos", getProductsFromCart);
+// --------- comprar ordern
+routerCarrito.post("/comprar", comprarProduct);
 
 // POST guardar 1 producto en 1 carrito
-routerCarrito.post("/:id/productos/:idProd", postProductToCart);
+routerCarrito.post("/:username/:id", addProductToCart);
 
-// DELETE borra 1 producto de 1 carrito
-routerCarrito.delete("/:clientId/productos/:idProd", deleteProductFromCart);
-
-routerCarrito.get("/:emailId", getCartByEmail);
+// --------------- DELETE: eliminar carro
+routerCarrito.delete("/:id", deleteCartProduct);
 
 module.exports = { routerCarrito };

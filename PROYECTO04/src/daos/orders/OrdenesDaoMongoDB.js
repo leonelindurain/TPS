@@ -1,7 +1,7 @@
 const ContenedorMongodb = require("../../contenedores/ContenedorMongoDB.js");
 const mongoose = require("mongoose");
 const { mongoConnect } = require("../../utils/mongoconnect.js");
-const logger = require("../../logs/loggers");
+const logger = require("../../logs/loggers.js");
 
 const ordenesCollection = "ordenes";
 
@@ -29,7 +29,7 @@ class OrdenesDaoMongoDB extends ContenedorMongodb {
 			}
 			return lastOrder[0].orderNumber;
 		} catch (error) {
-			console.log("Ocurrio un error: " + error);
+			logger.error("Ocurrio un error: " + error);
 		}
 	}
 
@@ -48,9 +48,18 @@ class OrdenesDaoMongoDB extends ContenedorMongodb {
 			let id = await this.save(orderData);
 			return id;
 		} catch (error) {
-			console.log("Guardando Orden - ocurrio un error: " + error);
+			logger.error("Guardando Orden - ocurrio un error: " + error);
 		}
 	}
+	getOrder = async (req, res) => {
+		let AllOrders = await this.service.getAllOrders();
+		res.send(AllOrders);
+	};
+
+	generateOrder = async usersCart => {
+		const generatedOrder = await this.service.generateAndSaveOrder(usersCart);
+		return generatedOrder;
+	};
 }
 
 module.exports = OrdenesDaoMongoDB;

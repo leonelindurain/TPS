@@ -23,8 +23,8 @@
         <h1 style="color:blue">Ingrese producto</h1>
 
         <div class="logout">
-            <span>¡Bienvenido! {{username}}</span>
-            <a href="/logout">logout</a>
+            <span>¡Bienvenido<span style="color: red"><b> {{username}}</b>!</span>
+                <a href="/logout">logout</a>
         </div>
         <br>
 
@@ -57,8 +57,11 @@
                                         class="card-img-top" alt="{{title}}"></a></td>
                             <td>Sólo quedan {{stock}} unidades </td>
 
-                            <td><a href="/carrito/{{clientId}}"><button type="button" class="btn btn-success">Agregar al
-                                        carro</button></a>
+                            <td>
+                                <form method="POST" action="/carrito/{{../this.username}}/{{_id}}"><button type="submit"
+                                        class="btn btn-success">Agregar al
+                                        carro</button>
+                                </form>
                             </td>
 
                             {{/each}}

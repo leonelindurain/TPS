@@ -25,7 +25,7 @@ class CarritoDaoMongoDb extends ContenedorMongodb {
 			if (cartById) {
 				cartById.products.push(product);
 
-				await this.modelo.updateOne(
+				await this.model.updateOne(
 					{ id: idCart },
 					{ $set: { products: cartById.products } }
 				);

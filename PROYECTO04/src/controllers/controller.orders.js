@@ -63,19 +63,10 @@ const deleteOrderById = async (req, res) => {
 	}
 };
 
-//********************** '*' Rest of the routes **********************************
-const routeNotAvailable = async (req, res) => {
-	res.json({
-		error: -2,
-		description: "Ruta no implementada"
-	});
-};
-
 module.exports = {
 	getOrders,
 	getOrderById,
 	postSendOrder,
 	putOrder,
-	deleteOrderById,
-	routeNotAvailable
+	deleteOrderById
 };

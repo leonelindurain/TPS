@@ -2,75 +2,74 @@ const { Carrito } = require("../daos/index.js");
 const logger = require("../logs/loggers.js");
 const Carritos = new Carrito();
 
-const postCartId = async (req, res) => {
-	const idCart = await Carritos.save(req.body);
+const getCart = async (req, res) => {
+	const { username } = await req.user;
+	console.log("usuario", username);
+
 	try {
-		res.json(idCart);
+		let carrito = await Carritos.getByEmail(username);
+		let products = carrito.products;
+		await res.render("carrito", {
+			username: username,
+			products: products
+		});
+	} catch (e) {
+		let products = [];
+		await res.render("carrito", {
+			username: username,
+			products: products
+		});
+	}
+};
+
+const postCart = async obj => {
+	return Carritos.save(obj);
+};
+
+const addProductToCart = async (req, res, idCart, product) => {
+	const { username } = await req.user;
+	try {
+		let cartById = await Carritos.getByEmail(username);
+		console.log(cartById);
+		let timestamp = Date.now();
+		if (cartById) {
+			await cartById.products.push(product);
+			await this.modelo.updateOne(
+				{ id: idCart },
+				{ $set: { products: cartById.products } }
+			);
+			return cartById;
+		} else {
+			postCart(product);
+		}
 	} catch (error) {
 		logger.error(error);
 	}
 };
 
-const deleteCartId = async (req, res) => {
-	const { id } = req.params;
-
+const deleteCartProduct = async (req, res) => {
+	const idProduct = req.params.id;
+	const { username } = await req.user;
 	try {
-		await Carritos.deleteById(id);
-	} catch (error) {
-		logger.error(error);
+		await Carrito.deleteOneProduct(username, idProduct);
+		res.redirect(`/carrito`);
+	} catch (err) {
+		logger.error(err);
 	}
 };
-
-const getProductsFromCart = async (req, res) => {
-	const { id } = req.params;
+const comprarProduct = async (req, res) => {
+	const username = await req.user.username;
 	try {
-		const cartById = await Carritos.getById(id);
-		productsList = cartById.products;
-		res.json(productsList);
-	} catch (error) {
-		logger.error(error);
-	}
-};
-
-const postProductToCart = async (req, res) => {
-	const { id } = req.params;
-	const productToAdd = req.body;
-
-	try {
-		cartById = await Carritos.addProductToCart(id, productToAdd);
-		res.json(cartById);
-	} catch (error) {
-		logger.error(error);
-	}
-};
-
-const deleteProductFromCart = async (req, res) => {
-	const { idCart, idProduct } = req.params;
-
-	try {
-		await Carritos.deleteProductById(idCart, idProduct);
-	} catch (error) {
-		logger.error(error);
-	}
-};
-
-const getCartByEmail = async (req, res) => {
-	const { emailId } = req.params;
-	console.log("email: ", emailId);
-	try {
-		const cartByEmail = await Carritos.getByEmail(emailId);
-		console.log(cartByEmail);
-		res.json(cartByEmail);
-	} catch (error) {
-		logger.error(error);
+		await Carritos.deleteAllProductsFromCart(username);
+		res.redirect(`/productos`);
+	} catch (err) {
+		logger.error(err);
 	}
 };
 
 module.exports = {
-	postCartId,
-	deleteCartId,
-	getProductsFromCart,
-	postProductToCart,
-	deleteProductFromCart,
-	getCartByEmail
+	getCart,
+	addProductToCart,
+	deleteCartProduct,
+	comprarProduct
 };
