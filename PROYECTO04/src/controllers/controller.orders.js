@@ -23,13 +23,13 @@ const getOrderById = async (req, res) => {
 //********************** POST: '/sendOrder' (Confirmar Compra) **********************************
 
 const postSendOrder = async (req, res) => {
-	const { emailId } = req.body;
-	const cartByEmail = await cart.getByEmail(emailId);
+	const { username } = req.body;
+	const cartByEmail = await cart.findCartByClientId(username);
 
 	productsList = cartByEmail.products;
-	const idOrder = await order.sendOrder(productsList, emailId);
+	const idOrder = await order.sendOrder(productsList, username);
 
-	mailerSendOrder(productsList, emailId);
+	mailerSendOrder(productsList, username);
 
 	await cart.deleteById(cartByEmail._id);
 
