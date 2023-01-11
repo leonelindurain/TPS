@@ -10,14 +10,30 @@
     <section class="px-5 py-4 container-sm bg-dark text-warning shadow-lg rounded">
         <h2>Información</h2>
         <ul>
-            <li>Argumentos de entrada: {{execArgv}}</li>
-            <li>Plataforma: {{platform}}</li>
-            <li>Versión de Node.js: {{version}}</li>
-            <li>Uso de la memoria RSS: {{memoryUsage}}</li>
-            <li>Número de núcleos: {{numCPUs}}</li>
-            <li>Ruta de ejecución: {{cwd}}</li>
-            <li>ID del proceso: {{pid}}</li>
-            <li>Carpeta del proyecto: {{execPath}}</li>
+            <li><b>Entorno:</b>
+                {{info.enviroment}}
+            </li>
+            <li><b>Puerto:</b>
+                {{info.port }}
+            </li>
+            <li><b>Modo:</b>
+                {{info.mode}}
+            </li>
+            <li><b>Tecnologia Persistencia:</b>
+                {{info.tech }}
+            </li>
+            <li><b>String conexion Mongo:</b>
+                {{info.mongo_connection }}
+            </li>
+            <li><b>Email de Admin:</b>
+                {{ info.email_admin }}
+            </li>
+            <li><b>Tiempo de sesion:</b>
+                {{info.session_time}} minutos
+            </li>
+            <li><b>Número de Nucleos:</b>
+                {{info.numCPUs}}
+            </li>
         </ul>
     </section>
 </body>

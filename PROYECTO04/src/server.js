@@ -1,48 +1,26 @@
-const express = require("express");
-require("dotenv").config();
+const routerProducts = require("./routes/products.routes");
+const routerCart = require("./routes/carts.routes");
+const routerLogin = require("./routes/login.routes");
+const routerChat = require("./routes/chats.routes");
+const routerMessagesWebsockets = require("./routes/messages.routes");
+const routerOrders = require("./routes/orders.routes");
+const routerMiscellaneous = require("./routes/miscellaneous.routes.js");
 
-const handlebars = require("express-handlebars");
+const dotenv = require("dotenv").config();
+
 const MongoStore = require("connect-mongo");
 const session = require("express-session");
-const cp = require("cookie-parser");
+const passport = require("./middlewares/passportLocal.middleware");
 
+const express = require("express");
 const app = express();
+const { arguments, config, mongoDbUrl } = require("./config");
+const numCPUs = require("os").cpus().length;
 
-// --- WEBSOCKET
-const { Server: HttpServer } = require("http");
-const { Server: IoServer } = require("socket.io");
-const httpServer = new HttpServer(app);
-const io = new IoServer(httpServer);
-
-// --- middleware ----------------
-app.use(cp());
-const passport = require("./utils/passportMiddleware");
-
-// --- Routers ----
-const { routerHome } = require("./routes/router.home");
-const { routerProductos } = require("./routes/router.products");
-const { routerCarrito } = require("./routes/router.cart");
-const { routerLogin } = require("./routes/router.login");
-const { routerProfile } = require("./routes/router.profile");
-const { routerRegister } = require("./routes/router.register");
-const { routerInfo } = require("./routes/router.info");
-const { routerChat } = require("./routes/router.chat");
-const { routerOrden } = require("./routes/router.orders.js");
-
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.json());
 
-const PORT = process.env.PORT || 4000;
-
-const { Chat } = require("./daos/index.js");
-
-// LOG4JS
-const logger = require("./logs/loggers");
-
-app.set("view engine", "hbs");
-app.set("views", "./src/views/layouts");
-
+const handlebars = require("express-handlebars");
 app.engine(
 	"hbs",
 	handlebars.engine({
@@ -53,92 +31,65 @@ app.engine(
 	})
 );
 
+app.set("view engine", "hbs");
+app.set("views", "./src/views/layouts");
+
+const cluster = require("cluster");
+const { Server: HttpServer } = require("http");
+const { Server: IOServer } = require("socket.io");
+const { log } = require("console");
+const serverHttp = new HttpServer(app);
+const io = new IOServer(serverHttp);
+app.use(express.static("public"));
+
 app.use(
 	session({
 		store: MongoStore.create({
-			mongoUrl: process.env.MONGODB_URL,
-			mongoOptions: {
-				useNewUrlParser: true,
-				useUnifiedTopology: true
-			}
+			mongoUrl: mongoDbUrl,
+			mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
 		}),
-		secret: process.env.MONGODB_SECRETO,
-		resave: false,
+		secret: config.sessionSecret,
+		resave: true,
+		saveUninitialized: true,
 		rolling: true,
-		saveUninitialized: false,
 		cookie: {
-			httpOnly: false,
-			secure: false,
-			maxAge: 90000
+			maxAge: 1000 * 60 * config.sessionTime
 		}
 	})
 );
 
-// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ------------ ROUTERS -----------------
-// HOME
-app.use("/", routerHome);
-// PRODUCTOS
-app.use("/productos", routerProductos);
-// CARRITO
-app.use("/carrito", routerCarrito);
-//ÓRDENES
-app.use("/ordenes", routerOrden);
-// LOGIN
-app.use("/", routerLogin);
-// PROFILE
-app.use("/", routerProfile);
-// REGISTER
-app.use("/", routerRegister);
-// ----- INFO PAGE ----
-app.use("/", routerInfo);
-// ----- CHAT ----
-app.use("/", routerChat);
+app.use("/info", routerMiscellaneous);
+app.use("/productos", routerProducts);
+app.use("/carrito", routerCart);
+app.use("/ordenes", routerOrders);
+app.use("/chat", routerChat);
+app.use("", routerLogin);
 
-/* ------------ CHAT ------------ */
-io.on("connection", async socket => {
-	const Chats = new Chat();
-	let mensajesChat = await Chats.getAll();
-	logger.info("Se contectó un usuario");
+io.on("connection", socket => {
+	logger.info("new connection IO:", socket.id);
+	routerMessagesWebsockets(socket, io);
+});
 
-	const mensaje = {
-		mensaje: "ok",
-		mensajesChat
-	};
+const MODE = process.env.MODE || "FORK";
+const PORT = process.env.PORT || 8080;
 
-	socket.emit("mensaje-servidor", mensaje);
-
-	socket.on("mensaje-nuevo", async (msg, cb) => {
-		// console.log(mensajesChat);
-
-		mensajesChat.push(msg);
-		// console.log(mensajesChat);
-		const mensaje = {
-			mensaje: "mensaje nuevo",
-			mensajesChat
-		};
-
-		const id = new Date().getTime();
-		io.sockets.emit("mensaje-servidor", mensaje);
-		cb(id);
-		await Chats.save({
-			id,
-			mail: msg.mail,
-			msg: msg.msg
-		});
+if (MODE === "CLUSTER" && cluster.isMaster) {
+	logger.info(`Puerto: ${PORT} - Modo: ${MODE}`);
+	logger.info(`Master ${process.pid} is running`);
+	for (let i = 0; i < numCPUs; i++) {
+		cluster.fork();
+	}
+	cluster.on("exit", (worker, code, signal) => {
+		logger.info(`worker ${worker.process.pid} died`);
 	});
-});
-
-// logger
-app.get("*", (req, res, next) => {
-	logger.error("ERROR 404 - NO ENCONTRADO");
-	res.sendStatus("404");
-});
-
-//--------- listener
-httpServer.listen(PORT, () => {
-	logger.info(`Server listening on ${PORT}`);
-});
+} else {
+	serverHttp.listen(PORT, err => {
+		if (err) logger.error("Error al iniciar el servidor");
+		logger.info(
+			`Servidor corriendo en el puerto ${PORT} - PID WORKER ${process.pid}`
+		);
+	});
+}

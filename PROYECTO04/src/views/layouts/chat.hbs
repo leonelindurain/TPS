@@ -14,80 +14,44 @@
 <body>
     <br>
 
-    <div class="container" style="background-color:#e9ecef">
+    <div class="container col-8 align-self-center border mt-3 bg-light p-3" style="background-color:#e9ecef">
+        <h2 class="text-center" style="color:blue">Centro de Mensajes:</h2>
+        <h3 class="text-center" id="ratio"></h3>
 
+        <form onsubmit="return addMessage(this)" class="mt-5">
+            <div class="mb-3">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+            </div>
 
-        <div class="container" style="background-color:#e9ecef">
-            <br>
-            <h2 style="color:blue">Centro de mensajes </h2>
+            <div class="container col-12">
+                <table class="table">
+                    <tbody id="messagesChat">
 
-            <form onsubmit="return addMessage(this)" class="mt-5">
-                <div class="form-group">
-                    <label for="mail"></label>
-                    <input required type="email" class="form-control col-6" id="mail" placeholder="Ingresa tu correo"
-                        name="mail" />
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mb-3 d-flex align-items-center">
+                <div class="col-10">
+                    <input type="text" class="form-control" id="text" name="text" placeholder="Ingrese su mensaje..."
+                        required>
                 </div>
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="msg"></label>
-                                <input type="msg" class="form-control" id="msg" placeholder="Ingresa un mensaje"
-                                    name="msg" />
-                            </div>
-                        </div>
-                        <div class="col-6" style="padding-top: 23px;">
-                            <input type="submit" class="btn btn-primary col-3" value="Enviar!" />
-                        </div>
-                    </div>
+                <div class="col-2 ml-2 text-center">
+                    <input type="submit" value="Enviar">
                 </div>
-
-
-            </form>
-            <br>
-            <ul id="chat" style="list-style: none;"></ul>
-            <br>
-
-            <br>
-        </div>
-
-        {{footer}}
-
-        <script>
-            const server = io().connect();
-            const render = mensajesChat => {
-                let chat = document.querySelector("#chat");
-                let html = mensajesChat.map(mens => {
-                    return `<li>
-        <strong style="color:blue"> ${mens.mail} </strong>
-		[<span style="color:brown">${mens.fecha}</span>]:
-        <em style="color:green"> ${mens.msg} </em>
-        </li>`;
-                });
-                chat.innerHTML = html.join("");
-            };
-            const addMessage = evt => {
-                const mail = document.querySelector("#mail").value;
-                let fecha = new Date().toLocaleTimeString();
-                const msg = document.querySelector("#msg").value;
-                const chatText = { mail, fecha, msg };
-                server.emit("mensaje-nuevo", chatText, id => {
-                });
-                return false;
-            };
-            server.on("mensaje-servidor", mensaje => {
-                // console.log("mensaje-servidor: ", mensaje);
-                render(mensaje.mensajesChat);
-            });
-        </script>
-        {{!-- boot strap --}}
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
-            integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-            integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-            crossorigin="anonymous"></script>
+            </div>
+        </form>
+    </div>
+    {{!-- boot strap --}}
+    <script src="js/index.js"></script>
+    <!-- Manejo de Fechas - date-fns v1.30.1 -->
+    <script src="js/date_fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

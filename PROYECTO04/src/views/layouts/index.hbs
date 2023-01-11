@@ -23,7 +23,7 @@
         <h1 style="color:blue">Ingrese producto</h1>
 
         <div class="logout">
-            <span>¡Bienvenido<span style="color: red"><b> {{username}}</b>!</span>
+            <span>¡Bienvenido<span style="color: red"><b> {{this.email}}</b></span>!
                 <a href="/logout">logout</a>
         </div>
         <br>
@@ -50,7 +50,8 @@
                     <tbody>
                         {{#each list}}
                         <tr>
-                            <td> <a href="/productos/{{id}}" style="text-decoration:none; color: white">{{title}}</a>
+                            <td> <a href="/productos/{{id}}"
+                                    style="text-decoration:none; color: white">{{description}}</a>
                             </td>
                             <td>${{price}}</td>
                             <td><a href="/productos/{{id}}"><img src="{{thumbnail}}" style="max-width: 5rem;"
@@ -58,10 +59,8 @@
                             <td>Sólo quedan {{stock}} unidades </td>
 
                             <td>
-                                <form method="POST" action="/carrito/{{../this.username}}/productos/{{_id}}"><button
-                                        type="submit" class="btn btn-success">Agregar al
-                                        carro</button>
-                                </form>
+                                <input type="submit" id="sendOrder" class="submit btn btn-success"
+                                    value="Agregar a carro">
                             </td>
 
                             {{/each}}
@@ -84,7 +83,9 @@
     {{> footer }}
 
     {{!-- boot strap --}}
-
+    <script src="js/index.js"></script>
+    <!-- Manejo de Fechas - date-fns v1.30.1 -->
+    <script src="js/date_fns.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
         integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"

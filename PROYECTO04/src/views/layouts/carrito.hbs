@@ -51,10 +51,8 @@
                     <td>
                         <input type="number" min="1" max="14" value="1" {{quantity}}>
                     </td>
-                    {{!-- <td><button class="btn btn-danger m-1">+</button></td>
-                    <td><button class="btn btn-danger m-1">-</button></td> --}}
                     <td>
-                        <form {{!-- action="/cart" --}} action="/carrito/{{_id}}" method="DELETE">
+                        <form action="/carrito/{{_id}}" method="DELETE">
                             <input type="hidden" name="id" value="{{_id}}" />
                             <button type="submit" class="btn btn-danger btn-block">Borrar</button>
                         </form>
