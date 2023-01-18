@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config() // 1
+require('dotenv').config()
 
 let productsDao
 let cartsDao
