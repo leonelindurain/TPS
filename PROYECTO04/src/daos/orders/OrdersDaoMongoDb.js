@@ -28,13 +28,13 @@ class OrdersDaoMongoDb extends ContainerMongoDb {
                 items: items,
                 orderNumber: orderNumber,
                 timestamp: new Date().toLocaleString(),
-                state: 'generada',
+                state: 'GENERADA',
                 email: email
             }
             let id = await this.save(orderData);
             return id;
         } catch (error) {
-            console.log("Guardando Orden - ocurrio un error: " + error);
+            console.log("Ocurrio un error: " + error);
         }
     };
 

@@ -7,8 +7,6 @@ class UsersDaoMongoDb extends ContainerMongoDb {
         super(Users)
     }
 
-    // Otras funciones diferentes
-
     async getByEmail(email) {
         try {
             let object = await this.model.find({ email: email })
@@ -17,7 +15,7 @@ class UsersDaoMongoDb extends ContainerMongoDb {
                 logger.info(object)
                 return object[0]
             } else {
-                logger.error('El item no existe') 
+                logger.error('El Usuario no existe') 
                 return null
             }
         } catch (error) {

@@ -16,9 +16,7 @@ const checkAuth = require("../middlewares/auth.middleware");
 const passport = require("passport");
 
 routerLogin.get("/", checkAuth, getRoot);
-
 routerLogin.get("/login", getLogin);
-
 routerLogin.post(
 	"/login",
 	passport.authenticate("login", {
@@ -27,21 +25,15 @@ routerLogin.post(
 	}),
 	postLogin
 );
-
 routerLogin.get("/logout", getLogout);
-
 routerLogin.get("/signup", getSignup);
-
 routerLogin.get("/signupError", getSignupError);
-
 routerLogin.get("/loginError", getLoginError);
-
 routerLogin.post(
 	"/signup",
 	passport.authenticate("signup", { failureRedirect: "/failregister" }),
 	postSignup
 );
-
 routerLogin.get("*", getOthers);
 
 module.exports = routerLogin;

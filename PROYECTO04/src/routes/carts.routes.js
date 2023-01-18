@@ -11,36 +11,15 @@ const {
 } = require("../controllers/carts.controller");
 
 const { Router } = express;
-const routerCart = Router();
+const routeCarrito = Router();
 
-//********************** GET: '/:id/productos' (Listar todos los productos de un carrito) **********************************
+routeCarrito.get("/:id/productos", getProductsFromCart);
+routeCarrito.post("/", postCart);
+routeCarrito.post("/:id/productos", postProductToCart);
+routeCarrito.delete("/:id", deleteCartById);
+routeCarrito.delete("/:idCart/productos/:idProduct", deleteProductFromCart);
+routeCarrito.get("/:emailId", getCartByEmail);
+routeCarrito.get("/", getAllProducts);
+routeCarrito.get("*", routeNotAvailable);
 
-routerCart.get("/:id/productos", getProductsFromCart);
-
-//********************** POST: '/' (Crea un carrito y devuelve su ID) **********************************
-
-routerCart.post("/", postCart);
-
-//********************** POST: '/:id/productos' (Incorporar productos al carrito) **********************************
-
-routerCart.post("/:id/productos", postProductToCart);
-
-//********************** DELETE: '/:id' (Vacia un carrito y lo elimina) **********************************
-
-routerCart.delete("/:id", deleteCartById);
-
-//********************** DELETE: '/:id/productos/:id_prod' (Eliminar un producto del carrito) **********************************
-
-routerCart.delete("/:idCart/productos/:idProduct", deleteProductFromCart);
-
-//********************** GET: '/email' **********************************
-
-routerCart.get("/:emailId", getCartByEmail);
-
-//********************** '*' Rest of the routes **********************************
-
-routerCart.get("/", getAllProducts);
-
-routerCart.get("*", routeNotAvailable);
-
-module.exports = routerCart;
+module.exports = routeCarrito;

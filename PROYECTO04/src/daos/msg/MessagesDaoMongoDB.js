@@ -1,12 +1,10 @@
 const ContainerMongoDb = require('../../containers/containerMongoDb')
-const Messages = require('../models/messages.model') // 1
+const Messages = require('../models/msg.model') // 1
 
 class MessagesDaoMongoDb extends ContainerMongoDb {
     constructor(){
         super(Messages)
     }
-
-    // getByEmail(Number) : Object
 
     async getAllByEmail(email) {
         try {

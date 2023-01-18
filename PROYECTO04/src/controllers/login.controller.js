@@ -25,7 +25,7 @@ const getLogin = async (req, res) => {
 
 	if (req.isAuthenticated()) {
 		const { user } = req.user;
-		logger.info("user logueado");
+		logger.info("usuario logueado");
 		res.render("index", {
 			email: req.session.passport.user.email,
 			completeName: req.session.passport.user.completeName,
@@ -33,7 +33,7 @@ const getLogin = async (req, res) => {
 			listExist: true
 		});
 	} else {
-		logger.info("user no logueado");
+		logger.info("usuario no logueado");
 		res.render("login");
 	}
 };
@@ -83,7 +83,7 @@ const getSignup = async (req, res) => {
 const getSignupError = async (req, res) => {
 	const { url, method } = req;
 	logger.info(`Se recibio una peticion ${method} a la ruta ${url}`);
-	logger.error("Error al registrarse");
+	logger.error("Error de registro");
 
 	res.render("failregister");
 };
@@ -91,7 +91,7 @@ const getSignupError = async (req, res) => {
 const getLoginError = async (req, res) => {
 	const { url, method } = req;
 	logger.info(`Se recibio una peticion ${method} a la ruta ${url}`);
-	logger.error("Error al loguearse");
+	logger.error("Error de loggeo");
 
 	res.render("faillogin");
 };

@@ -4,13 +4,10 @@ const product = productsDao
 
 const administrator = true
 
-//********************** GET (Devuelve todos los productos) **********************************
 const getProducts = async (req, res) => {
     const productsList = await product.getAll()
     res.json(productsList)
 }
-
-//********************** GET (Devuelve un producto según ID) **********************************
 
 const getProductById = async (req, res) => {
     const { id } = req.params
@@ -21,8 +18,6 @@ const getProductById = async (req, res) => {
         res.json({ error: 'Producto no encontrado' })
 }
 
-//********************** GET (Devuelve productos segun categoria) **********************************
-
 const getProductByCategory = async (req, res) => {
     const { category } = req.params
 
@@ -32,8 +27,6 @@ const getProductByCategory = async (req, res) => {
         :
         res.json({ error: 'Producto no encontrado' })
 }
-
-//************************ POST (Recibe y Agrega un producto) **********************************
 
 const postProduct = async (req, res) => {
     if (administrator) {
@@ -47,8 +40,6 @@ const postProduct = async (req, res) => {
         })
     }
 }
-
-//************************ PUT (Recibe y Actualiza un product según su ID) ***********************
 
 const putProduct = async (req, res) => {
     if (administrator) {
@@ -64,8 +55,6 @@ const putProduct = async (req, res) => {
     }
 }
 
-//************************ DELETE (Elimina un producto según su ID) ***********************
-
 const deleteProductById = async (req, res) => {
     if (administrator) {
         const { id } = req.params
@@ -78,8 +67,6 @@ const deleteProductById = async (req, res) => {
         })
     }
 }
-
-//********************** '*' Rest of the routes **********************************
 
 const routeNotAvailable = async (req, res) => {
     res.json({

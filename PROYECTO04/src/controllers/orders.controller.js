@@ -5,13 +5,11 @@ const cart = cartsDao
 
 const administrator = true
 
-//********************** GET (Devuelve todas las ordenes) **********************************
 const getOrders = async (req, res) => {
     const orderList = await order.getAll()
     res.json(orderList)
 }
 
-//********************** GET (Devuelve una orden según ID) **********************************
 const getOrderById = async (req, res) => {
     const { id } = req.params
     const orderById = await order.getById(id)
@@ -20,8 +18,6 @@ const getOrderById = async (req, res) => {
         :
         res.json({ error: 'Producto no encontrado' })
 }
-
-//********************** POST: '/sendOrder' (Confirmar Compra) **********************************
 
 const postSendOrder = async (req, res) => {
     const { emailId } = req.body
@@ -37,7 +33,6 @@ const postSendOrder = async (req, res) => {
     res.json({ mensaje: "Compra confirmada", productos: productsList, idOrder })
 }
 
-//************************ PUT (Recibe y Actualiza una orden según su ID) ***********************
 const putOrder = async (req, res) => {
     if (administrator) {
         const { id } = req.params
@@ -52,7 +47,6 @@ const putOrder = async (req, res) => {
     }
 }
 
-//************************ DELETE (Elimina una orden según su ID) ***********************
 const deleteOrderById = async (req, res) => {
     if (administrator) {
         const { id } = req.params
@@ -66,7 +60,6 @@ const deleteOrderById = async (req, res) => {
     }
 }
 
-//********************** '*' Rest of the routes **********************************
 const routeNotAvailable = async (req, res) => {
     res.json({
         error: -2,

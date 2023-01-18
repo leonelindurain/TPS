@@ -2,8 +2,6 @@ const { response } = require("express");
 const { cartsDao } = require("../daos/index");
 const cart = cartsDao;
 
-//********************** GET: '/:id/productos' (Listar todos los productos de un carrito) **********************************
-
 const getProductsFromCart = async (req, res) => {
 	const { id } = req.params;
 	const cartById = await cart.getById(id);
@@ -11,14 +9,10 @@ const getProductsFromCart = async (req, res) => {
 	res.render(productsList);
 };
 
-//********************** POST: '/' (Crea un carrito y devuelve su ID) **********************************
-
 const postCart = async (req, res) => {
 	const idCart = await cart.save(req.body);
 	res.json(idCart);
 };
-
-//********************** POST: '/:id/productos' (Incorporar productos al carrito) **********************************
 
 const postProductToCart = async (req, res) => {
 	const { id } = req.params;
@@ -27,14 +21,10 @@ const postProductToCart = async (req, res) => {
 	res.json(cartById);
 };
 
-//********************** DELETE: '/:id' (Vacia un carrito y lo elimina) **********************************
-
 const deleteCartById = async (req, res) => {
 	const { id } = req.params;
 	await cart.deleteById(id);
 };
-
-//********************** DELETE: '/:id/productos/:id_prod' (Eliminar un producto del carrito) **********************************
 
 const deleteProductFromCart = async (req, res) => {
 	const { idCart, idProduct } = req.params;
@@ -66,8 +56,6 @@ const getAllProducts = async (req, res) => {
 		logger.error(e);
 	}
 };
-
-//********************** '*' Rest of the routes **********************************
 
 const routeNotAvailable = async (req, res) => {
 	res.json({

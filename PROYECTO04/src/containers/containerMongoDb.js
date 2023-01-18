@@ -7,8 +7,6 @@ class ContainerMongoDb {
         this.model = model
     }
 
-    // save(Object) : Number
-
     async save(obj) {
         try {
             let product = new this.model(obj)
@@ -20,8 +18,6 @@ class ContainerMongoDb {
         }
     }
 
-    // getByID(Number) : Object
-
     async getById(id) {
         try {
             let object = await this.model.findOne({_id:id})
@@ -30,15 +26,13 @@ class ContainerMongoDb {
                 logger.info(object)
                 return object
             } else {
-                logger.info('El item no existe');
+                logger.info('El producto no existe');
                 return null
             }
         } catch (error) {
             logger.error(error);
         }
     }
-
-    // getAll() : Object[]
 
     async getAll() {
         try {
@@ -59,8 +53,6 @@ class ContainerMongoDb {
         }
     }
 
-    // updateById
-
     async updateById(id, product) {
 
         try {
@@ -68,24 +60,22 @@ class ContainerMongoDb {
             if (this.getById(id)) {
                 product.timestamp = timestamp
                 await this.model.updateOne({ _id: id }, { $set: product })
-                return { mensaje: 'Objeto actualizado' }
+                return { mensaje: 'Producto actualizado' }
             } else {
-                return { mensaje: 'Objeto no encontrado' }
+                return { mensaje: 'Producto no encontrado' }
             }
         } catch (error) {
             logger.error(error);
         }
     }
-
-    // deleteById(Number) : void
 
     async deleteById(id) {
         try {
             if (this.getById(id)) {
                 await this.model.deleteOne({ _id: id })
-                logger.info('Objeto Eliminado')
+                logger.info('Producto Borrado')
             } else {
-                logger.info('No se encontró el objeto')
+                logger.info('No se encontró el producto')
             }
 
         } catch (error) {
@@ -93,11 +83,9 @@ class ContainerMongoDb {
         }
     }
 
-    // deleteAll() : void 
-
     async deleteAll() {
         await this.model.deleteMany()
-        logger.info('Todos los objetos se han eliminado')
+        logger.info('Todos los productos se han borrado')
     }
 
 }

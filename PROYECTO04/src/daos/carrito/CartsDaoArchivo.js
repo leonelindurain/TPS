@@ -1,4 +1,4 @@
-const ContainerFile = require('../../containers/ContainerFile.js.js')
+const ContainerFile = require('../../containers/containerArchivo')
 const route = './database/carts.json'
 const fs = require('fs');
 
@@ -7,9 +7,6 @@ class CartsDaoFile extends ContainerFile {
     constructor(){
         super(route)
     }
-
-    // addProductToCart(Number, Object) : Number (In Process)
-
     async addProductToCart(idCart, product) {
         try {
 
@@ -21,7 +18,7 @@ class CartsDaoFile extends ContainerFile {
                 cartById.products.push(productToAdd)
                 await this.updateById(parseInt(idCart), cartById)
                 let idProduct = cartById.products[cartById.products.length - 1].id
-                logger.info(`El producto agregado tiene el ID: ${idProduct}`);
+                logger.info(`El producto agregado obtuvo el ID: ${idProduct}`);
                 return idProduct;
 
             } else {
@@ -30,7 +27,7 @@ class CartsDaoFile extends ContainerFile {
                 cartById.products.push(productToAdd)
                 await this.updateById(parseInt(idCart), cartById)
 
-                logger.info(`El producto agregado tiene el ID: 1`);
+                logger.info(`El producto agregado obtuvo el ID: 1`);
                 return 1;
 
             }
@@ -39,8 +36,6 @@ class CartsDaoFile extends ContainerFile {
             logger.error(error);
         }
     }
-
-    // deleteProductById(idCart, idProduct) 
 
     async deleteProductById(idCart, idProduct) {
         idCart = parseInt(idCart)
@@ -56,7 +51,7 @@ class CartsDaoFile extends ContainerFile {
                 let productosFiltrados = cart.products.filter(product => product.id !== idProduct)
                 cart.products = productosFiltrados
                 this.updateById(idCart, cart)
-                logger.info('Producto Eliminado')
+                logger.info('Producto Borrado')
             } else {
                 logger.info('No se encontró el Producto')
             }

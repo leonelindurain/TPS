@@ -61,7 +61,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/info", routerMiscellaneous);
 app.use("/productos", routerProducts);
 app.use("/carrito", routerCart);
 app.use("/ordenes", routerOrders);
