@@ -1,9 +1,9 @@
 require("dotenv").config();
 
-const { MONGODB_URL, MONGODB_SECRETO } = process.env;
+const { MONGODB_URL, MONGODB_SECRET } = process.env;
 
 let config = {
-	sessionSecret: MONGODB_SECRETO,
+	sessionSecret: MONGODB_SECRET,
 	sessionTime: process.env.SESSION_TIME
 };
 

@@ -1,4 +1,4 @@
-const express = require("express");
+const { Router } = require("express")
 const {
 	getProducts,
 	getProductById,
@@ -9,7 +9,6 @@ const {
 	routeNotAvailable
 } = require("../controllers/products.controller");
 
-const { Router } = express;
 const routerProducts = Router();
 routerProducts.get("/", getProducts);
 routerProducts.get("/:id", getProductById);
