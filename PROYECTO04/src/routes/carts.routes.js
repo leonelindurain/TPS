@@ -1,25 +1,16 @@
-const express = require("express");
-const {
-	getProductsFromCart,
-	postCart,
-	postProductToCart,
-	deleteCartById,
-	deleteProductFromCart,
-	getCartByEmail,
-	getAllProducts,
-	routeNotAvailable
-} = require("../controllers/carts.controller");
+const express = require('express')
+const {getProductsFromCart,postCart,postProductToCart,deleteCartById,deleteProductFromCart,getCartByEmail,routeNotAvailable} = require('../controllers/carts.controller')
 
-const { Router } = express;
-const routeCarrito = Router();
+const { Router } = express
+const routerCart = Router()
 
-routeCarrito.get("/:id/productos", getProductsFromCart);
-routeCarrito.post("/", postCart);
-routeCarrito.post("/:id/productos", postProductToCart);
-routeCarrito.delete("/:id", deleteCartById);
-routeCarrito.delete("/:idCart/productos/:idProduct", deleteProductFromCart);
-routeCarrito.get("/:emailId", getCartByEmail);
-routeCarrito.get("/", getAllProducts);
-routeCarrito.get("*", routeNotAvailable);
+routerCart.get('/:id/productos', getProductsFromCart)
+routerCart.post('/', postCart)
+routerCart.post('/:id/productos', postProductToCart)
+routerCart.delete('/:id', deleteCartById)
+routerCart.delete('/:idCart/productos/:idProduct', deleteProductFromCart)
+routerCart.get('/:emailId', getCartByEmail)
+routerCart.get('*', routeNotAvailable)
 
-module.exports = routeCarrito;
+module.exports = routerCart
+

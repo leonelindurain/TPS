@@ -1,10 +1,11 @@
 const ContainerMongoDb = require('../../containers/containerMongoDb')
-const Carts = require('../models/carritos.models') // 1
+const Carts = require('../models/carts.models') // 1
 
 class CartsDaoMongoDb extends ContainerMongoDb {
     constructor() {
         super(Carts)
     }
+
     async addProductToCart(idCart, product) {
         try {
 
@@ -27,7 +28,7 @@ class CartsDaoMongoDb extends ContainerMongoDb {
             logger.error(error);
         }
     }
-    
+
     async deleteProductById(idCart, idProduct) {
         try {
             let cart = await this.getById(idCart)

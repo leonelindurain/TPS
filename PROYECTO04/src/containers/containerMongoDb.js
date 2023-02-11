@@ -1,4 +1,4 @@
-const connectDB = require('../connection') 
+const connectDB = require('./connection.js') 
 connectDB()
 
 class ContainerMongoDb {
@@ -26,7 +26,7 @@ class ContainerMongoDb {
                 logger.info(object)
                 return object
             } else {
-                logger.info('El producto no existe');
+                logger.info('El item no existe');
                 return null
             }
         } catch (error) {
@@ -60,9 +60,9 @@ class ContainerMongoDb {
             if (this.getById(id)) {
                 product.timestamp = timestamp
                 await this.model.updateOne({ _id: id }, { $set: product })
-                return { mensaje: 'Producto actualizado' }
+                return { mensaje: 'Objeto actualizado' }
             } else {
-                return { mensaje: 'Producto no encontrado' }
+                return { mensaje: 'Objeto no encontrado' }
             }
         } catch (error) {
             logger.error(error);
@@ -73,9 +73,9 @@ class ContainerMongoDb {
         try {
             if (this.getById(id)) {
                 await this.model.deleteOne({ _id: id })
-                logger.info('Producto Borrado')
+                logger.info('Objeto Eliminado')
             } else {
-                logger.info('No se encontró el producto')
+                logger.info('No se encontró el objeto')
             }
 
         } catch (error) {
@@ -85,7 +85,7 @@ class ContainerMongoDb {
 
     async deleteAll() {
         await this.model.deleteMany()
-        logger.info('Todos los productos se han borrado')
+        logger.info('Todos los objetos se han eliminado')
     }
 
 }

@@ -15,7 +15,7 @@ class UsersDaoMongoDb extends ContainerMongoDb {
                 logger.info(object)
                 return object[0]
             } else {
-                logger.error('El Usuario no existe') 
+                logger.error('El item no existe') 
                 return null
             }
         } catch (error) {

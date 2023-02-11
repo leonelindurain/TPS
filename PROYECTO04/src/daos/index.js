@@ -1,4 +1,4 @@
-require('dotenv').config()
+const dotenv = require('dotenv').config() // 1
 
 let productsDao
 let cartsDao
@@ -7,32 +7,32 @@ let ordersDao
 let usersDao
 
 switch (process.env.TECH) {
-    case 'Archivo':
-        const ProductsDaoArchivo = require('./products/ProductsDaoArchivo')
-        const CartsDaoArchivo = require('./carrito/CartsDaoArchivo')
-        const MessagesDaoArchivo = require('./msg/MessagesDaoArchivo')
-        const OrdersDaoArchivo = require('./orders/OrdersDaoArchivo')
-        const UsersDaoArchivo = require('./users/UsersDaoArchivo')
+    case 'file':
+        const ProductsDaoFile = require('./products/ProductsDaoFile')
+        const CartsDaoFile = require('./carts/CartsDaoFile')
+        const MessagesDaoFile = require('./messages/MessagesDaoFile')
+        const OrdersDaoFile = require('./orders/OrdersDaoFile')
+        const UsersDaoFile = require('./users/UsersDaoFile')
 
-        productsDao = new ProductsDaoArchivo()
-        cartsDao = new CartsDaoArchivo()
-        messagesDao = new MessagesDaoArchivo()
-        ordersDao = new OrdersDaoArchivo()
-        usersDao = new UsersDaoArchivo()
+        productsDao = new ProductsDaoFile()
+        cartsDao = new CartsDaoFile()
+        messagesDao = new MessagesDaoFile()
+        ordersDao = new OrdersDaoFile()
+        usersDao = new UsersDaoFile()
         break
 
-    case 'mongoDB':
-        const ProductsDaoMongoDB = require('./products/ProductsDaoMongoDB')
-        const CartsDaoMongoDB = require('./carrito/CartsDaoMongoDB')
-        const MessagesDaoMongoDB = require('./msg/MessagesDaoMongoDB')
-        const OrdersDaoMongoDB = require('./orders/OrdersDaoMongoDB')
-        const UsersDaoMongoDB = require('./users/UsersDaoMongoDB')
+    case 'mongoDb':
+        const ProductsDaoMongoDb = require('./products/ProductsDaoMongoDb')
+        const CartsDaoMongoDb = require('./carts/CartsDaoMongoDb')
+        const MessagesDaoMongoDb = require('./messages/MessagesDaoMongoDb')
+        const OrdersDaoMongoDb = require('./orders/OrdersDaoMongoDb')
+        const UsersDaoMongoDb = require('./users/UsersDaoMongoDb')
         
-        productsDao = new ProductsDaoMongoDB()
-        cartsDao = new CartsDaoMongoDB()
-        messagesDao = new MessagesDaoMongoDB()
-        ordersDao = new OrdersDaoMongoDB()
-        usersDao = new UsersDaoMongoDB()
+        productsDao = new ProductsDaoMongoDb()
+        cartsDao = new CartsDaoMongoDb()
+        messagesDao = new MessagesDaoMongoDb()
+        ordersDao = new OrdersDaoMongoDb()
+        usersDao = new UsersDaoMongoDb()
         break
 }
 

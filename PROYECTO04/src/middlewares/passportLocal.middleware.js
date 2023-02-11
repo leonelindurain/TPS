@@ -8,7 +8,24 @@ const users = usersDao
 const dotenv = require('dotenv').config() // 1
 const {mailer} = require('../mailer/mailer')
 
-// ------------- PASSPORT ----------------
+const isValidPassword = (user, password) => {
+    return bcrypt.compareSync(password, user.password)
+}
+
+const createHash = (password) => {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
+}
+
+passport.serializeUser(function (user, done) {
+    logger.info("serialize");
+    done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+    logger.info("deserialize");
+    done(null, user);
+});
+
 passport.use('login', new LocalStrategy(
     async (username, password, done) => {
         const email = username
@@ -56,7 +73,7 @@ passport.use('signup', new LocalStrategy({
                             Email: ${email} <br>`
 
     const mailOptions = {
-        from: 'MaraArtesanias',
+        from: 'Leonel',
         to: process.env.MAIL_ADMIN,
         subject: 'Nuevo Registro',
         html: signupMessage
@@ -70,24 +87,5 @@ passport.use('signup', new LocalStrategy({
 
 }))
 
-// ---------------------- UTIL -----------------------
-const isValidPassword = (user, password) => {
-    return bcrypt.compareSync(password, user.password)
-}
-
-const createHash = (password) => {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
-}
-
-// ----------------- SERIALIZER ----------------------
-passport.serializeUser(function (user, done) {
-    logger.info("serialize");
-    done(null, user);
-})
-
-passport.deserializeUser(function (user, done) {
-    logger.info("deserialize");
-    done(null, user);
-})
-
 module.exports = passport;
+

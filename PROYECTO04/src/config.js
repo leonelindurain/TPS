@@ -1,16 +1,21 @@
-require("dotenv").config();
-
-const { MONGODB_URL, MONGODB_SECRET } = process.env;
+require('dotenv').config()
 
 let config = {
-	sessionSecret: MONGODB_SECRET,
-	sessionTime: process.env.SESSION_TIME
-};
+    mongoUser : process.env.MONGO_USER,
+    mongoPass : process.env.MONGO_PASS,
+    sessionSecret : process.env.SESSION_SECRET,
+    sessionTime: process.env.SESSION_TIME,
+}
 
-let mongoDbUrl = MONGODB_URL;
+let mongoDbUrl = ""
+if (process.env.NODE_ENV === 'production') {
+    mongoDbUrl = 'mongodb+srv://'+config.mongoUser+':'+config.mongoPass+'@cluster0.zdlmmvu.mongodb.net/?retryWrites=true&w=majority'
+} else {
+    mongoDbUrl = 'mongodb://localhost:27017/ecommerce'   
+}
 
 module.exports = {
-	mongoDbUrl,
-	config,
-	arguments
-};
+    mongoDbUrl,
+    config,
+    arguments
+}

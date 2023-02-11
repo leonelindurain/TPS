@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { mongoDbUrl } = require('./config')
+const { mongoDbUrl } = require('../config')
 
 const connectDB = async () => {
     try {
@@ -14,3 +14,5 @@ const connectDB = async () => {
     }
 }
 module.exports = connectDB
+
+

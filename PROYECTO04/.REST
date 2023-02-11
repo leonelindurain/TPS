@@ -1,11 +1,80 @@
-POST http://localhost:8080/productos HTTP/1.1
+############################# PARA PRODUCTOS ##################################
+
+GET http://localhost:8080/productos HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:8080/productos/ HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Cerveza Peñon Del Aguila Oktoberfest",
-	"thumbnail": "https://static.wixstatic.com/media/d2b1c5_673fd6b51b234345b2b72d7d41b482c9~mv2.png/v1/fill/w_600,h_600,al_c/d2b1c5_673fd6b51b234345b2b72d7d41b482c9~mv2.png",
-	"price": 1000,
-	"category": "Cerveza",
-	"description": "Cerveza Peñon Del Aguila Oktoberfest Lata X 473 Cc",
-	"stock": 100
+    "description": "Cerveza de prueba",
+    "category": "Bebidas",
+    "thumbnail": "https://dbdzm869oupei.cloudfront.net/img/sticker/preview/22413.png",
+    "price": 1000,
+    "stock": 24
 }
+
+###
+DELETE http://localhost:8080/productos/63e7ed5d6c470ac65e26b540 HTTP/1.1
+content-type: application/json
+
+################### PARA CARRITO ############################################
+###
+GET http://localhost:8080/carrito/63e7ee6f6c470ac65e26b54e/productos HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:8080/carrito/ HTTP/1.1
+content-type: application/json
+
+{
+    "email": "leonelindurain95@gmail.com",
+    "products":[],
+    "address": "Buenos Aires"
+}
+
+###
+DELETE http://localhost:8080/carrito/63e7ee6f6c470ac65e26b54e HTTP/1.1
+content-type: application/json
+
+
+###
+POST http://localhost:8080/carrito/63e7ee6f6c470ac65e26b54e/productos HTTP/1.1
+content-type: application/json
+
+{
+    "_id": "63e7ed5d6c470ac65e26b540",
+    "description": "Cerveza de prueba",
+    "category": "Bebidas",
+    "thumbnail": "https://dbdzm869oupei.cloudfront.net/img/sticker/preview/22413.png",
+    "price": 1000,
+    "stock": 24,
+    "quantity": 1
+}
+
+###
+DELETE http://localhost:8080/carrito/63e7ee6f6c470ac65e26b54e/productos/63e7ed5d6c470ac65e26b540 HTTP/1.1
+content-type: application/json
+
+
+############################# PARA ORDENES ##################################
+
+GET http://localhost:8080/ordenes HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:8080/ordenes/ HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:8080/ordenes/ HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:8080/ordenes/ HTTP/1.1
+content-type: application/json
+
+###
+DELETE http://localhost:8080/ordenes/ HTTP/1.1
+content-type: application/json

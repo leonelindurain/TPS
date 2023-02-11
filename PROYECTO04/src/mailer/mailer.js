@@ -38,6 +38,7 @@ const mailerSendOrder = (products, email) => {
                                 <th>Imagen</th>
                             </tr>
                         </thead>
+
                         <tbody>`+
                             products.map((el, index) => `
                             <tr>
@@ -57,11 +58,10 @@ const mailerSendOrder = (products, email) => {
                           `
 
     const mailOptions = {
-        from: 'MaraArtesanias',
+        from: 'Leonel',
         to: process.env.MAIL_ADMIN,
         subject: `Nueva Orden de Compra de: ${email}`,
         html: sendOrderMessage
-        // html: '<h1 style="color: blue;">Contenido de prueba desde <span style="color: green;">Node.js con Nodemailer</span></h1>'
     }
 
     mailer(mailOptions)

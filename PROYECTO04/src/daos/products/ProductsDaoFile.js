@@ -1,4 +1,4 @@
-const ContainerFile = require('../../containers/containerArchivo')
+const ContainerFile = require('../../containers/containerFile')
 const route = './database/products.json'
 
 class ProductsDaoFile extends ContainerFile {

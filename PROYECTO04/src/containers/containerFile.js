@@ -5,6 +5,8 @@ class ContainerFile {
         this.route = route
     }
 
+    // save(Object) : Number
+
     async save(obj) {
         try {
 
@@ -15,13 +17,13 @@ class ContainerFile {
 
                 await fs.promises.writeFile(this.route, JSON.stringify([...dataArchParse, { id: dataArchParse[dataArchParse.length - 1].id + 1, timestamp: timestamp, ...obj }], null, 2))
                 let idProduct = dataArchParse[dataArchParse.length - 1].id + 1
-                console.log(`El producto tiene el ID: ${idProduct}`);
+                console.log(`El item tiene el ID: ${idProduct}`);
                 return idProduct;
 
             } else {
 
                 await fs.promises.writeFile(this.route, JSON.stringify([{ id: 1, timestamp: timestamp, ...obj }], null, 2))
-                console.log(`El producto tiene el ID: 1`);
+                console.log(`El item tiene el ID: 1`);
                 return 1;
 
             }
@@ -30,6 +32,8 @@ class ContainerFile {
             console.log(error);
         }
     }
+
+    // getByID(Number) : Object
 
     async getById(id) {
         try {
@@ -41,7 +45,7 @@ class ContainerFile {
                 console.log(product)
                 return product
             } else {
-                console.log('El producto no existe');
+                console.log('El item no existe');
                 return null
             }
         } catch (error) {
@@ -49,11 +53,14 @@ class ContainerFile {
         }
     }
 
+    // getAll() : Object[]
+
     async getAll() {
         try {
             let dataArch = await fs.promises.readFile(this.route, 'utf8')
             let dataArchParse = JSON.parse(dataArch)
             if (dataArchParse.length) {
+                // console.log(dataArchParse)
                 return dataArchParse
 
             } else {
@@ -64,6 +71,8 @@ class ContainerFile {
             console.log(error);
         }
     }
+
+    // updateById
 
     async updateById(id, product) {
         product.id = id
@@ -87,6 +96,8 @@ class ContainerFile {
         }
     }
 
+    // deleteById(Number) : void
+
     async deleteById(id) {
         try {
             let dataArch = await fs.promises.readFile(this.route, 'utf8')
@@ -95,9 +106,9 @@ class ContainerFile {
             if (product) {
                 let dataArchParseFiltered = dataArchParse.filter(product => product.id !== id)
                 await fs.promises.writeFile(this.route, JSON.stringify(dataArchParseFiltered, null, 2))
-                console.log('Producto Borrado')
+                console.log('Producto Eliminado')
             } else {
-                console.log('Producto no encontrado')
+                console.log('No se encontró el producto')
             }
 
         } catch (error) {
@@ -105,9 +116,11 @@ class ContainerFile {
         }
     }
 
+    // deleteAll() : void
+
     async deleteAll() {
         await fs.promises.writeFile(this.route, JSON.stringify([], null, 2), 'utf8')
-        console.log('Todos los productos se han borrado')
+        console.log('Todos los productos se han eliminado')
     }
 
 }

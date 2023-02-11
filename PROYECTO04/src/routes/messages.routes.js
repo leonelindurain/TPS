@@ -1,15 +1,13 @@
 const { messagesDao } = require("../daos/index");
-const objMsg = messagesDao
+const objMessages = messagesDao
 
-const routerMsg = (socket, io) => {
-
-    objMsg.getAll().then(chats => {
+const routerMessagesWebsockets = (socket, io) => {
+    objMessages.getAll().then(chats => {
         io.sockets.emit('messageChat-server', chats);
     })
-
     socket.on('messageChat-new', messageComplete => {
-        objMsg.save(messageComplete).then(res => {
-            objMsg.getAll().then(chats => {
+        objMessages.save(messageComplete).then(res => {
+            objMessages.getAll().then(chats => {
                 io.sockets.emit('messageChat-server', chats);
             })
         }
@@ -17,4 +15,4 @@ const routerMsg = (socket, io) => {
     })
 }
 
-module.exports = routerMsg
+module.exports = routerMessagesWebsockets
